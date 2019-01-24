@@ -1,0 +1,60 @@
+<div class="layui-side layui-bg-gray">
+    <div class="layui-side-scroll">
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <ul class="layui-nav layui-nav-tree main-nav-tree"  lay-filter="test">
+            <!--<li class="layui-nav-item">-->
+                <!--<span class='icon icon-setting'></span>-->
+                <!--<a href="javascript:;">系统设置</a>-->
+            <!--</li>-->
+            <li  style='' class="layui-nav-item">
+                <span class='icon icon-xiaoqu'></span>
+                <a  class="c-link" data-url="{:url('campus/index')}" href="{:url('campus/index')}">校区管理</a>
+            </li>
+            <li style='' class="layui-nav-item">
+                <span class='icon icon-loudong'></span>
+                <a href="javascript:;">楼栋管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a class="c-link" data-url="{:url('dmbuild/add')}" href="{:url('dmbuild/add')}">楼栋管理</a></dd>
+                    <dd><a class="c-link" data-url="{:url('dmfloor/index')}" href="{:url('dmfloor/index')}">楼层管理</a></dd>
+                    <dd><a class="c-link" data-url="{:url('dmdormitory/index')}" href="{:url('dmdormitory/index')}">宿舍管理</a></dd>
+                </dl>
+            </li>
+            <li style='' class="layui-nav-item">
+                <span class='icon icon-renyuan'></span>
+                <a href="javascript:;">人员管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a class="c-link" data-url="{:url('dmstay/index')}" href="{:url('dmstay/index')}">学生入住</a></dd>
+                    <dd><a class="c-link" data-url="{:url('dmbuildmanage/index')}" href="{:url('dmbuildmanage/index')}">楼栋管理员信息</a></dd>
+                    <dd><a class="c-link" data-url="{:url('dmdormitorymanage/index')}" href="{:url('dmdormitorymanage/index')}">宿舍管理员信息</a></dd>
+                    <dd><a class="c-link" data-url="{:url('bed_manage/index')}" href="{:url('bed_manage/index')}">学生铺位分配</a></dd>
+                    <dd><a class="c-link" data-url="{:url('changedormitory/index')}" href="{:url('changedormitory/index')}">换/退宿舍</a></dd>
+                    <dd><a class="c-link" data-url="{:url('staff/index')}" href="{:url('staff/index')}">员工管理</a></dd>
+                    <dd><a class="c-link" data-url="{:url('visiter/index')}" href="{:url('visiter/index')}">外来人员管理</a></dd>
+
+                </dl>
+            </li>
+            <li style='' class="layui-nav-item">
+                <span class='icon icon-wupin'></span>
+                <a href="javascript:;">物品管理</a>
+                <dl class="layui-nav-child">
+                    <!--<dd><a class="c-link" data-url='' href="javascript:;">公用物品信息</a></dd>-->
+                    <dd><a class="c-link" data-url="{:url('repair/index')}" href="{:url('repair/index')}">物品损坏维修管理</a></dd>
+                    <dd><a class="c-link" data-url="{:url('honorable/index')}" href="{:url('honorable/index')}">贵重物品进出登记</a></dd>
+                </dl>
+            </li>
+            <!--<li style='' class="layui-nav-item">-->
+                <!--<span class='icon icon-guizhang'></span>-->
+                <!--<a class="c-link" href="javascript:;">规章制度</a>-->
+
+            <!--</li>-->
+            <li style='' class="layui-nav-item">
+                <span class='icon icon-lhkh'></span>
+                <a href="javascript:;">量化考核管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a class="c-link" data-url="{:url('assess/index')}" href="{:url('assess/index')}">学生评定管理</a></dd>
+                    <dd><a class="c-link" data-url="{:url('dormitoryHygiene/index')}" href="{:url('dormitoryHygiene/index')}">卫生量化考核</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>

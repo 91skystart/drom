@@ -1,0 +1,70 @@
+{include file='index/header' /}
+{include file='index/menu' /}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <div class='route-box'>
+            <span class='icon icon-position'></span>
+            <span class='title'>当前位置：</span>
+            <span>首页</span>
+            <span>></span>
+            <span><a href="">校区管理</a></span>
+        </div>
+        <div class='search-box'>
+          <div class="ipt-box">
+              <form  action="{:url('campus/index')}" method='post'>
+                  <input placeholder="请输入校区名称" value="{$cp_name}" name="cp_name" class='search-ipt' type="text">
+                  <span class='icon-search all-search'></span>
+              </form>
+          </div>
+
+        </div>
+        <div style='margin-bottom:20px;' class='nav-tab-box'>
+            <span class='tab-item on'><a  href="{:url('campus/index')}">校区查看</a></span>
+            <span class='tab-item'><a   href="{:url('campus/edit')}">编辑校区</a></span>
+        </div>
+        <div class='c-table-box'>
+            <table class="layui-table">
+                <colgroup>
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>校区名称</th>
+                        <th>校区地址</th>
+                        <th>校区联系人</th>
+                        <th>电话号码</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="val"}
+                    <tr>
+                        <td>{$val.cp_name}</td>
+                        <td>{$val.cp_addr}</td>
+                        <td>{$val.cp_resp}</td>
+                        <td>{$val.cp_tel}</td>
+                    </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+        <div class='page-box clearfix'>
+            <div style='font-size:16px;color:#333' class='p-l'>
+                <span>共</span>
+                <span style='margin:0 5px'>{$count}</span>
+                <span>条记录</span>
+            </div>
+            <div class='p-r'>
+                <!-- 分页 -->
+                <div id="c_page">{$page}</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{include file='index/footer' /}
+</body>
+</html>
