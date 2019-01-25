@@ -386,7 +386,6 @@ class Common extends Controller
         return json(['status' => 0, 'msg' => '恢复失败！']);
     }
 
-<<<<<<< HEAD
     /**
 	 * exportExcel
 	 * @param $xlsTitle exceltitle
@@ -502,7 +501,7 @@ class Common extends Controller
 			}
 			return ['totalrows' => count($arr), 'totalcols' => $totalCols, 'title' => $sheetTitle, 'data' => $arr];
 		}
-=======
+    }
     private function sysList($auth){
 		$data = 1;
 		switch($auth){
@@ -519,7 +518,6 @@ class Common extends Controller
 				$data = '3';
 		}
 		return $data;
->>>>>>> zwd
 	}
 
 }

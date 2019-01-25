@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:42:"../application/index/tpl/campus\index.html";i:1548311237;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1548311275;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
-=======
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:42:"../application/index/tpl/campus\index.html";i:1545127147;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1548402601;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
->>>>>>> zwd
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:42:"../application/index/tpl/campus\index.html";i:1545127147;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1548402963;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -98,7 +94,7 @@
             <!--</li>-->
             <li  style='' class="layui-nav-item">
                 <span class='icon icon-xiaoqu'></span>
-                <a  class="c-link" data-url="<?php echo url('campus/index'); ?>" href="<?php echo url('campus/index'); ?>">校区查看</a>
+                <a  class="c-link" data-url="<?php echo url('campus/index'); ?>" href="<?php echo url('campus/index'); ?>">校区管理</a>
             </li>
             <li style='' class="layui-nav-item">
                 <span class='icon icon-loudong'></span>
@@ -157,7 +153,7 @@
             <span class='title'>当前位置：</span>
             <span>首页</span>
             <span>></span>
-            <span><a href="">校区查看</a></span>
+            <span><a href="">校区管理</a></span>
         </div>
         <div class='search-box'>
           <div class="ipt-box">
@@ -169,8 +165,8 @@
 
         </div>
         <div style='margin-bottom:20px;' class='nav-tab-box'>
-            <!-- <span class='tab-item on'><a  href="<?php echo url('campus/index'); ?>">校区查看</a></span> -->
-            <!-- <span class='tab-item'><a   href="<?php echo url('campus/edit'); ?>">编辑校区</a></span> -->
+            <span class='tab-item on'><a  href="<?php echo url('campus/index'); ?>">校区查看</a></span>
+            <span class='tab-item'><a   href="<?php echo url('campus/edit'); ?>">编辑校区</a></span>
         </div>
         <div class='c-table-box'>
             <table class="layui-table">
