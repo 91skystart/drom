@@ -6,6 +6,7 @@
     <title>home</title>
     <link rel="stylesheet" href="/static/js/layui/css/layui.css">
     <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/header.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/c_page.css">
     <!--[if lt IE 9]>
@@ -20,27 +21,65 @@
 </head>
 
 <body class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
+        <div style='' class='row clearfix basic-desktop-container'>
+                <div class='topbar-box default-style-color col-lg-12'>
+                    <div class='menu-btn'>
+                        <span class='icon-menu'></span>
+                            <ul class='menu-child-list hide'>
+                                {foreach name="systemModel" item="vo"}
+                                <li><a href="{$vo.sd_url}">{$vo.sd_name}</a></li>
+                                {/foreach}
+                            </ul>    
+                    </div>
+                    <div class='topbar col-lg-12 clearfix'>
+                        <div style='' class='pull-left'>
+                            <h3 style='margin-left:70px;font-size:24px;color:#f5f5f5'>欢迎来到{$Think.config.sushe_text}</h3>
+                        </div>
+                        <div class='pull-right '>
+                            <div class='user-box'>
+                                <a href="{$Think.config.sso_config.base_url}/home/index/usermodify" style="color:#fff;">
+                                    <span class='icon-user'></span>
+                                </a>
+                                <a href="{$Think.config.sso_config.base_url}/admin/index/index" style="color:#fff;">
+                                    <span class='welcome'>欢迎您，{$loginName}</span>
+                                </a>
+                            </div>
+                            <span class='c-line-1'>|</span>
+                            <div class='topbar-btn-list'>
+                                <span class='btn-item icon-email'></span>
+                                <span class='btn-item icon-question'></span>
+                                <span class='btn-item icon-skin'></span>
+                                <a href="{$logoutUrl}"><span id='login_out'  class='btn-item icon-close t'></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                
+          
+                
+            </div>
+<!-- <div class="layui-layout layui-layout-admin">
     <div class="layui-header c-header">
         <span class='icon-menu'></span>
-        <div class="layui-logo c-logo">宿舍管理系统</div>
+        <div class="layui-logo c-logo">宿舍管理系统</div> -->
         <!-- 头部区域 -->
-        <span class='head-line-1'></span>
+        <!-- <span class='head-line-1'></span>
         <span class='logo-ps'>科迅软件</span>
         <ul class="layui-nav layui-layout-right nav-user">
-            <li  class="layui-nav-item">
-                <a href="javascript:;" class='username'>
+            <li  class="layui-nav-item"> -->
+                <!-- <a href="javascript:;" class='username'> -->
                     <!--<img src="{$avatarImg != '' ? $avatarImg : ''}http://t.cn/RCzsdCq" class="layui-nav-img">-->
-                    您好 , {$loginName}
-                </a>
+                    <!-- 您好 , {$loginName} -->
+                <!-- </a> -->
                 <!--<dl class="layui-nav-child top-nav-child">-->
                     <!--<dd><a href="">基本资料</a></dd>-->
                     <!--<dd><a href="">安全设置</a></dd>-->
                 <!--</dl>-->
-            </li>
+            <!-- </li>
             <span class='c-s-line'></span>
             <li class="layui-nav-item layui-nav-item-close">
                 <a class='icon icon-sign-out' href="{$logoutUrl}"></a>
             </li>
         </ul>
-    </div>
+    </div> -->

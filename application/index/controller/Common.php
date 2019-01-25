@@ -61,6 +61,15 @@ class Common extends Controller
         $this->assign('avatarImg','');
         $this->assign('logoutUrl',Config::get('sso_config')['logout_url']);
         parent::_initialize();
+        $roleModel = new \app\index\model\Roles;
+        $sysModel = new \app\index\model\Sysmodule;
+        $rolesAlls = $roleModel->getAllDatas('','rs_id,rs_pid,rs_name')->toArray();
+
+        $rolesAllParam = searchRelationIds(Cookie::get('rs_id'), $rolesAlls, 'rs_pid', 'rs_id', false);
+        $auths = $this->sysList(end($rolesAllParam));
+        $systemModel = $sysModel->getAuthSon($auths);
+        $systemModel? $systemModel: [];
+        $this->assign('systemModel', $systemModel);
     }
 
 
@@ -377,6 +386,7 @@ class Common extends Controller
         return json(['status' => 0, 'msg' => '恢复失败！']);
     }
 
+<<<<<<< HEAD
     /**
 	 * exportExcel
 	 * @param $xlsTitle exceltitle
@@ -492,6 +502,24 @@ class Common extends Controller
 			}
 			return ['totalrows' => count($arr), 'totalcols' => $totalCols, 'title' => $sheetTitle, 'data' => $arr];
 		}
+=======
+    private function sysList($auth){
+		$data = 1;
+		switch($auth){
+			case 1:
+				$data = '2,3,4';
+				break;
+			case 2:
+				$data = '4';
+				break;
+			case 3:
+				$data = '2';
+				break;
+			case 4:
+				$data = '3';
+		}
+		return $data;
+>>>>>>> zwd
 	}
 
 }
