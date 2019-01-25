@@ -37,3 +37,17 @@ function requestPost($url,$param)
 
     return $data;
 }
+function searchRelationIds($rsId, $arr, $pid = 'rs_pid', $id = 'rs_id', $attach = true, $tmp = []){
+    if(!in_array($rsId, $tmp)) $tmp[] = $rsId;
+    foreach($arr as $k=>$val){
+        $attachId = $attach? $val[$pid]: $val[$id];
+        $attachRefId = $attach? $val[$id]: $val[$pid];
+        if($attachId== $rsId){
+            if($val[$pid] != 0){
+                $tmp[] = $attachRefId;
+                $tmp = searchRelationIds($attachRefId, $arr, $pid, $id, $attach, $tmp);
+            }
+        }
+    }
+    return $tmp;
+}

@@ -17,4 +17,7 @@ class Roles extends Model
     protected $resultSetType = 'collection';
     protected $createTime = false;
     protected $updateTime = false;
+    public function getAllDatas($condition='', $field = ''){
+		return $this->field($field)->where($condition)->select();
+	}
 }
