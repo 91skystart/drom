@@ -121,7 +121,7 @@ class Common extends Controller
     {
         // 读取权限的缓存是否存在
         $authList = json_decode(Cache::get(Config::get('cache_key')['auth']),true);
-
+        // $authList = '';
         // 缓存不存在
         if ( empty($authList) )
         {
@@ -153,7 +153,7 @@ class Common extends Controller
                 }
 
                 /* 获取所有的权限 */
-//                $authList = model("auth")->where(['au_id' => ['in',implode(",",$authIds)],'au_son' => Config::get('sso_config')['au_son']])
+            //    $authList = model("auth")->where(['au_id' => ['in',implode(",",$authIds)],'au_son' => Config::get('sso_config')['au_son']]);
                  $authList = model("auth")->where(['au_son' => Config::get('sso_config')['au_son']])
                     ->field("au_id,au_pid,au_authurl,au_otherprivileges")
                     ->select()
@@ -209,7 +209,7 @@ class Common extends Controller
         //搜索条件保存
         $this->assign('search',$this->search);
 
-        $count = $this->model->count();
+        $count = $this->model->where($this->search)->count();
         $this->assign('count',$count);
         //渲染模板
         return $this->fetch();
@@ -231,14 +231,12 @@ class Common extends Controller
     public function insert() {
 
         if($this->req->isPost()){
-
             $data = $this->req->post();
 
             //加载模型验证
             if($this->vd != '') {
 
                 $result = $this->validate($data,$this->vd.'.add');
-
 
                 if(1 != $result) {
                     return json(['status' => 0, 'msg' => $result]);
@@ -388,6 +386,122 @@ class Common extends Controller
         return json(['status' => 0, 'msg' => '恢复失败！']);
     }
 
+    /**
+	 * exportExcel
+	 * @param $xlsTitle exceltitle
+	 * @param $cellData tablehead
+	 * @param $data tabledata
+	 * @param $type exceltype
+	 * @author mupeng <1912959071@qq.com>
+	 */
+	protected function exportExcel($xlsTitle, $cellData, $data, $type = 'Excel5'){
+		$suffix = $type == 'Excel5'? 'xls': 'xlsx';
+		$fileName = date('YmdHis').'.'.$suffix;
+		\think\Loader::import('phpexcel.PHPExcel');
+		$oPhpExcel = new \PHPExcel();
+		$cellNum = count($cellData);
+		$cellName = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ'];
+		//所有单元格（行）默认高度
+		$oPhpExcel->getActiveSheet(0)->getDefaultRowDimension()->setRowHeight(25);
+		$objSheet = $oPhpExcel->getActiveSheet(0)->mergeCells('A1:'.$cellName[$cellNum-1].'1'); //合并单元格,并且获得当前活动的sheet
+		//设置文字居左（HORIZONTAL_LEFT，默认值）中（HORIZONTAL_CENTER）右（HORIZONTAL_RIGHT）
+		$oPhpExcel->setActiveSheetIndex(0)->setCellValue('A1', $xlsTitle)->getStyle('A1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER); 
+		// 设置字体大小
+		$objSheet->getStyle('A1')->getFont()->setSize(18);
+		// 设置字体加粗
+		$objSheet->getStyle('A1')->getFont()->setBold(true);
+		// 设置标题
+		$objSheet->setTitle($xlsTitle);
+		// 表头数据处理
+		foreach($cellData as $k=>$val){
+			// 设置每一列宽度
+			$objSheet->getColumnDimension($cellName[$k])->setWidth(16);
+			$objSheet->getStyle('A1')->getFont()->setSize(16);
+			// 设置水平居中和垂直居中
+			$objSheet->getStyle($cellName[$k].'2')->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			// 设置数据
+			$oPhpExcel->getActiveSheet(0)->setCellValue($cellName[$k].'2', $val[0])->getStyle($cellName[$k].'2')->getFont()->setBold(true);
+		}
+		// 表数据处理
+		foreach($data as $key => $v){
+			foreach($cellData as $key2 => $v2){
+				$objSheet->getStyle($cellName[$key2].($key+'3'))->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$objSheet->getStyle($cellName[$key2].($key+'3'))->getFont()->setSize(12);
+				$oPhpExcel->getActiveSheet(0)->setCellValue($cellName[$key2].($key+'3'), $v[$v2[1]]);	
+			}
+		}
+		// 告诉浏览器的输出类型
+		$type == 'Excel5'? header('Content-Type: application/vnd.ms-excel;charset=utf-8;name="'.$xlsTitle.'.xls"'): header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');;
+		// 告诉浏览器输出文件的名称，attachment新窗口打印inline本窗口打印
+		header('Content-Disposition: attachment;filename="'.$fileName.'"');
+		// 禁止缓存
+		header('Cache-Control: max-age=0');
+		$objWriter = \PHPExcel_IOFactory::createWriter($oPhpExcel, $type);
+    	$objWriter->save('php://output');
+		exit;
+	}
+
+	/**
+	 * importExcel
+	 * @author mupeng <1912959071@qq.com>
+	 */
+	protected function importExcel($file, $headCount = 3){
+		$path = realpath($_SERVER['DOCUMENT_ROOT'].$file);
+		if(!file_exists($path)){
+			return returnJson('导入文件不存在', -2, '', true);
+		}
+		\think\Loader::import('phpexcel.PHPExcel');
+		$objReader = stristr($path, '.xlsx') === false? \PHPExcel_IOFactory::createReader('Excel5'): \PHPExcel_IOFactory::createReader('Excel2007');
+		$phpReader = $objReader->load($path);
+		if(!isset($phpReader)) return returnJson('文件导入失败', 0, '', true);
+		$worksheet = $phpReader->getAllSheets();
+		// 处理数据对象
+		foreach($worksheet as $val){
+			// 获取表头
+			$sheetTitle = $val->getTitle();
+			// 获取行数(包括表头)
+			$totalRows = $val->getHighestRow();
+			// 获取总列数
+			$sCols = $val->getHighestColumn();
+			$totalCols = \PHPExcel_Cell::columnIndexFromString($sCols);
+			$arr = [];
+			for ($currentRow=1; $currentRow<=$totalRows; $currentRow++){
+				$row = [];
+				for ($currentColumn=0; $currentColumn<$totalCols; $currentColumn++){
+					$cell =$val->getCellByColumnAndRow($currentColumn, $currentRow);
+					$afCol = \PHPExcel_Cell::stringFromColumnIndex($currentColumn+1);
+					$bfCol = \PHPExcel_Cell::stringFromColumnIndex($currentColumn-1);
+					$col = \PHPExcel_Cell::stringFromColumnIndex($currentColumn);
+					$address = $col.$currentRow;
+					$value = $val->getCell($address)->getValue();
+					// 不能使用公式
+					if (substr($value,0,1) == '=') exit(returnJson('不能使用公式', 0, '', true));
+					if ($cell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC){
+						$cellstyleformat = $cell->getStyle($cell->getCoordinate())->getNumberFormat();
+						$formatcode = $cellstyleformat->getFormatCode();
+						if (preg_match('/^([$[A-Z]*-[0-9A-F]*])*[hmsdy]/i', $formatcode)){
+							$value = gmdate("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($value));
+						}else{
+							$value = \PHPExcel_Style_NumberFormat::toFormattedString($value, $formatcode);
+						}
+					}
+
+					if (is_object($value)){
+						$value = $value->__toString();
+					}
+					$row[$currentColumn] = $value;
+				}
+				$arr[$currentRow] = $row;
+			}
+			unset($worksheet);
+			unset($objReader);
+			unset($phpReader);
+			for($i = 0; $i< $headCount; $i++){
+				array_shift($arr);
+			}
+			return ['totalrows' => count($arr), 'totalcols' => $totalCols, 'title' => $sheetTitle, 'data' => $arr];
+		}
+    }
     private function sysList($auth){
 		$data = 1;
 		switch($auth){

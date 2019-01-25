@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:58:"../application/index/tpl/dormitory_hygiene\statistics.html";i:1547171335;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:48:"../application/index/tpl/bed_manage\builder.html";i:1545290210;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -106,7 +106,6 @@
     </div>
 </div>
 
-
 <div class="layui-body">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;">
@@ -115,124 +114,88 @@
             <span class='title'>当前位置：</span>
             <span>首页</span>
             <span>></span>
-            <span><a href="javascript:void(0)" style="color: #666;">量化考核管理</a></span>
+            <span><a href="javascript:void(0)" class="menu-nav">人员管理</a></span>
             <span>></span>
-            <span><a href="javascript:void(0)">卫生量化考核</a></span>
+            <span><a href="javascript:void(0)">学生铺位分配</a></span>
         </div>
-        <div class='search-box' style="display:none;">
+        <div class='search-box' style="display: none">
             <div class="ipt-box">
-                <form  action="<?php echo url('dormitoryHygiene/index'); ?>" method='post'>
-                    <input placeholder="请输入姓名" value="" name="keywords" class='search-ipt' type="text">
+                <form  action="<?php echo url('bed_manage/builder'); ?>" method='post'>
+                    <input placeholder="请输入内容" value="" name="keywords" class='search-ipt' type="text">
                     <span class='icon-search all-search'></span>
                 </form>
             </div>
         </div>
         <div style='margin-top:20px;' class='clearfix'>
             <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
-                <span class="tab-item "><a  href="<?php echo url('dormitoryHygiene/index'); ?>">宿舍卫生检查</a></span>
-                <span class="tab-item on"><a  href="<?php echo url('dormitoryHygiene/statistics'); ?>">宿舍卫生检查统计</a></span>
+                <span class='tab-item on'><a  href="">智慧分配</a></span>
             </div>
-        </div>
-
-        <div style='' class='ipt-main-box'>
-            <form id="addForm" action="<?php echo url('dormitoryHygiene/statistics'); ?>" method='post'>
-                <div class="ipt-box">
-                    <label for="">校区：</label>
-                    <select class='ipt-xs select-campus' name="campus_id" >
-                        <option value="">请选择</option>
-                        <?php if(is_array($campusList) || $campusList instanceof \think\Collection || $campusList instanceof \think\Paginator): $i = 0; $__LIST__ = $campusList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$campusInfo): $mod = ($i % 2 );++$i;?>
-                        <option value="<?php echo $campusInfo['cp_id']; ?>" <?php if($campusInfo['cp_id'] == $paramData['campus_id']): ?>selected<?php endif; ?>><?php echo $campusInfo['cp_name']; ?></option>
-                        <?php endforeach; endif; else: echo "" ;endif; ?>
-
-                    </select>
-                </div>
-                <div class="ipt-box">
-                    <label for="">楼栋名称：</label>
-                    <select class='ipt-xs select-build' name="build_id">
-                        <option value="">请选择</option>
-                        <?php if(is_array($buildList) || $buildList instanceof \think\Collection || $buildList instanceof \think\Paginator): $i = 0; $__LIST__ = $buildList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$buildInfo): $mod = ($i % 2 );++$i;?>
-                        <option value="<?php echo $buildInfo['id']; ?>" <?php if($buildInfo['id'] == $paramData['build_id']): ?>selected<?php endif; ?>><?php echo $buildInfo['build_name']; ?></option>
-                        <?php endforeach; endif; else: echo "" ;endif; ?>
-                    </select>
-                </div>
-                <div class="ipt-box">
-                    <label for="">层数：</label>
-                    <select class='ipt-xs select-floor' name="floor_id">
+            <div class='p-r'>
+                <form id="search_from" action="<?php echo url('bed_manage/builder',['id' => $builderInfo['id']]); ?>" method='post'>
+                    <select class='ipt-xs' name="floor_id">
                         <option value="">请选择</option>
                         <?php if(is_array($floorList) || $floorList instanceof \think\Collection || $floorList instanceof \think\Paginator): $i = 0; $__LIST__ = $floorList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$floorInfo): $mod = ($i % 2 );++$i;?>
                         <option value="<?php echo $floorInfo['id']; ?>" <?php if($floorInfo['id'] == $paramData['floor_id']): ?>selected<?php endif; ?>><?php echo $floorInfo['floor_name']; ?></option>
                         <?php endforeach; endif; else: echo "" ;endif; ?>
                     </select>
-                </div>
-                <div class="ipt-box">
-                    <label for="">房号：</label>
-                    <select class='ipt-xs select-dormitory' name="dormitory_id">
+                    <select style='margin:0 10px;' class='ipt-xs' name="dormitory_id">
                         <option value="">请选择</option>
                         <?php if(is_array($dormitoryList) || $dormitoryList instanceof \think\Collection || $dormitoryList instanceof \think\Paginator): $i = 0; $__LIST__ = $dormitoryList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$dormitoryInfo): $mod = ($i % 2 );++$i;?>
                         <option value="<?php echo $dormitoryInfo['id']; ?>" <?php if($dormitoryInfo['id'] == $paramData['dormitory_id']): ?>selected<?php endif; ?>><?php echo $dormitoryInfo['room_num']; ?></option>
                         <?php endforeach; endif; else: echo "" ;endif; ?>
                     </select>
-                </div>
-                <div class="ipt-box">
-                    <label for="">年级：</label>
-                    <select class='ipt-xs' name="gd_id">
-                        <option value="">请选择</option>
-                        <?php if(is_array($gradeList) || $gradeList instanceof \think\Collection || $gradeList instanceof \think\Paginator): $i = 0; $__LIST__ = $gradeList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$gradeInfo): $mod = ($i % 2 );++$i;?>
-                        <option value="<?php echo $gradeInfo['gd_id']; ?>" <?php if($paramData['gd_id'] == $gradeInfo['gd_id']): ?>selected<?php endif; ?> ><?php echo $gradeInfo['gd_name']; ?></option>
-                        <?php endforeach; endif; else: echo "" ;endif; ?>
-                    </select>
-                </div>
-                <div class="ipt-box">
-                    <label for="">宿舍得分：</label>
-                    <input type="text" class='ipt ipt-xs' name="score" placeholder="" value="<?php echo $paramData['score']>0?$paramData['score'] : ''; ?>"/>
-                </div>
-                <button class="btn btn-info" onclick="$('#addForm').submit()">搜索</button>
-            </form>
+                    <button class="btn btn-info" type="submit">搜索</button>
+                </form>
+            </div>
         </div>
 
         <div class='c-table-box'>
-            <table class="layui-table">
-                <colgroup>
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="6%">
-                    <col width="10%">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th>序号</th>
-                    <th>校区</th>
-                    <th>楼栋名称</th>
-                    <th>楼层名称</th>
-                    <th>房间号</th>
-                    <th>年级</th>
-                    <th>宿舍得分</th>
-                    <th>检查日期</th>
-                    <th>备注内容</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php if(is_array($list['data']) || $list['data'] instanceof \think\Collection || $list['data'] instanceof \think\Paginator): $i = 0; $__LIST__ = $list['data'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?>
-                <tr>
-                    <td><?php echo $val['id']; ?></td>
-                    <td><?php echo $val['campus']['cp_name']; ?></td>
-                    <td><?php echo $val['build']['build_name']; ?></td>
-                    <td><?php echo $val['floor']['floor_name']; ?></td>
-                    <td><?php echo $val['dormitory']['room_num']; ?></td>
-                    <td><?php echo $val['grade']['gd_name']; ?></td>
-                    <td><?php echo $val['score']; ?></td>
-                    <td><?php if($val['exam_date']): ?><?php echo date('Y-m-d',$val['exam_date']); else: ?>--<?php endif; ?></td>
-                    <td><?php echo $val['remark']; ?></td>
-                </tr>
+            <ul class="school-branch-floor">
+                <?php if(is_array($list['data']) || $list['data'] instanceof \think\Collection || $list['data'] instanceof \think\Paginator): $i = 0; $__LIST__ = $list['data'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$floorInfo): $mod = ($i % 2 );++$i;?>
+                <li class="floor-item">
+
+                    <div class="floor-title"><?php echo $floorInfo['floor_name']; ?></div>
+                    <div class="floor-content">
+                        <?php if(is_array($floorInfo['room']) || $floorInfo['room'] instanceof \think\Collection || $floorInfo['room'] instanceof \think\Paginator): $i = 0; $__LIST__ = $floorInfo['room'];if( count($__LIST__)==0 ) : echo "<div class='empty-floor'>该楼层没有宿舍</div>" ;else: foreach($__LIST__ as $key=>$dormitoryInfo): $mod = ($i % 2 );++$i;?>
+                        <div class="room-content">
+                            <div class="branch-left" >
+                                <ul>
+                                    <li class="branch-left-item">所在层数：<?php echo $floorInfo['floor_name']; ?></li>
+                                    <li class="branch-left-item">房间号：<?php echo $dormitoryInfo['room_num']; ?></li>
+                                    <li class="branch-left-item">总床位数：<?php echo $dormitoryInfo['several']; ?></li>
+                                    <li class="branch-left-item">剩余床位:<?php echo $dormitoryInfo['room_leave_count']; ?></li>
+                                </ul>
+                            </div>
+                            <div class="branch-right" >
+
+                                <?php if($dormitoryInfo['check_in_count'] == 0): ?>
+                                <div class="room-content-show ">
+                                    空
+                                </div>
+                                <?php elseif($dormitoryInfo['room_leave_count'] == 0): ?>
+                                <div class="room-content-show room_full">
+                                    满
+                                </div>
+                                <?php else: ?>
+                                <div class="room-content-show room_not_empty">
+                                    住
+                                </div>
+                                <?php endif; ?>
+
+                                <div class="branch-build grey">
+                                    <div class="branch-inner"> <?php echo $dormitoryInfo['room_num']; ?></div>
+                                </div>
+                            </div>
+                            <a class="btn btn-info" style="margin-left: 66px;" href="<?php echo url('bed_manage/room',['id' => $dormitoryInfo['id']]); ?>">安排入住</a>
+                        </div>
+                    <?php endforeach; endif; else: echo "<div class='empty-floor'>该楼层没有宿舍</div>" ;endif; ?>
+                    </div>
+                    <div style="clear:both"></div>
+                </li>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
-                </tbody>
-            </table>
+            </ul>
         </div>
+
         <div class='page-box clearfix'>
             <div style='font-size:16px;color:#333' class='p-l'>
                 <span>共</span>
@@ -244,9 +207,10 @@
                 <div id="c_page"><?php echo $page; ?></div>
             </div>
         </div>
-    </div>
-</div>
 
+    </div>
+
+</div>
 </div>
 <script src='/static/js/jquery-3.2.1.min.js'></script>
 <script src="/static/js/layui/layui.all.js"></script>
@@ -276,96 +240,26 @@
 </script>
 <script src='/static/js/main.js'></script>
 
+
 <script>
-
-    layui.use('laydate', function(){
-        var laydate = layui.laydate;
-
-        laydate.render({
-            elem: '#addForm input[name="exam_date"]',
-            format: 'yyyy-MM-dd'
-        });
-    });
-
-    /* 校区选择 */
-    $(document).on('change','.select-campus',function(){
-
-        var campus_id = $(this).val();
-
-        if(campus_id)
-        {
-            $.post("<?php echo url('tools/getbuild'); ?>",{campus_id:campus_id},function(res){
-                if(res.status == 1)
-                {
-                    var html = '<option value="">请选择</option>';
-                    $.each(res.data, function(k, v) {
-                        html+= '<option value="'+ v.id+'">'+ v.build_name+'</option>';
-                    });
-                    $('#addForm select[name="build_id"]').html(html);
-                    $('#addForm select[name="floor_id"]').html('<option value="">请选择</option>');
-                    $('#addForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
-                }
-            },'json');
-        }
-        else
-        {
-            $('#addForm select[name="build_id"]').html('<option value="">请选择</option>');
-            $('#addForm select[name="floor_id"]').html('<option value="">请选择</option>');
-            $('#addForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
-        }
-    });
-
-
-    /* 楼栋选择 */
-    $(document).on('change','.select-build',function(){
-
-        var campus_id = $('#addForm select[name="campus_id"]').val();
-        var build_id = $(this).val();
-
-        if(campus_id && build_id)
-        {
-            $.post("<?php echo url('tools/getFloor'); ?>",{campus_id:campus_id,build_id:build_id},function(res){
-                if(res.status == 1)
-                {
-                    var html = '<option value="">请选择</option>';
-                    $.each(res.data, function(k, v) {
-                        html+= '<option value="'+ v.id+'">'+ v.floor_name+'</option>';
-                    });
-                    $('#addForm select[name="floor_id"]').html(html);
-                    $('#addForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
-                }
-            },'json');
-        }
-        else
-        {
-            $('#addForm select[name="floor_id"]').html('<option value="">请选择</option>');
-            $('#addForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
-        }
-    });
-
-
-    /* 楼层选择 */
-    $(document).on('change','.select-floor',function(){
-
-        var campus_id = $('#addForm select[name="campus_id"]').val();
-        var build_id = $('#addForm select[name="build_id"]').val();
+    $(document).on('change','#search_from select[name="floor_id"]',function(){
         var floor_id = $(this).val();
-
-        if(campus_id && build_id && floor_id)
-        {
-            $.post("<?php echo url('tools/getRoom'); ?>",{campus_id:campus_id,build_id:build_id,floor_id:floor_id},function(res){
+        if(floor_id){
+            $.post("<?php echo url('tools/getRoom'); ?>",{campus_id:<?php echo $builderInfo['campus_id']; ?>,build_id:<?php echo $builderInfo['id']; ?>,floor_id:floor_id},function(res){
                 if(res.status == 1){
                     var html = '<option value="">请选择</option>';
                     $.each(res.data, function(k, v) {
                         html+= '<option value="'+ v.id+'">'+ v.room_num+'</option>';
                     });
-                    $('#addForm select[name="dormitory_id"]').html(html);
+                    $('#search_from select[name="room_id"]').html(html);
                 }
             },'json');
         }else{
-            $('#addForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
+            $('#search_from select[name="room_id"]').html('<option value="">请选择</option>');
         }
     });
 </script>
 </body>
 </html>
+
+

@@ -1,0 +1,208 @@
+{include file='index/header' /}
+{include file='index/menu' /}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <div class='route-box'>
+            <span class='icon icon-position'></span>
+            <span class='title'>当前位置：</span>
+            <span>首页</span>
+            <span>></span>
+            <span><a href="javascript:void(0)" class="menu-nav">人员管理</a></span>
+            <span>></span>
+            <span><a href="javascript:void(0)">学生铺位分配</a></span>
+        </div>
+        <div class='search-box'>
+            <div class="ipt-box">
+                <form  action="{:url('bed_manage/allot',['id' => $dormitoryInfo['id']])}" method='post'>
+                    <input placeholder="请输入学生学号"  name="student_no" value="{$param.student_no}" class='search-ipt' type="text">
+                    <span class='icon-search all-search'></span>
+                </form>
+            </div>
+
+        </div>
+        <div style='margin-top:20px;' class='clearfix'>
+            <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
+                <span class='tab-item on'><a  href="javascript:void(0)" class="js-allot">分配学生</a></span>
+            </div>
+            <div class='p-r'>
+                <form id="search_from" action="{:url('bed_manage/allot',['id' => $dormitoryInfo['id']])}" method='post'>
+                    <select style='margin:0 10px;' class='ipt-xs' name="campus_id">
+                        <option value="">请选择</option>
+                        {volist name="campusList" id="val"}
+                        <option value="{$val.cp_id}" {if condition="$val.cp_id == $param['campus_id']"}selected{/if}>{$val.cp_name}</option>
+                        {/volist}
+                    </select>
+                    <select style='margin:0 10px;' class='ipt-xs' name="gd_id">
+                        <option value="">请选择</option>
+                        {volist name="gradeList" id="val"}
+                        <option value="{$val.gd_id}" {if condition="$val.gd_id == $param['gd_id']"}selected{/if}>{$val.gd_name}</option>
+                        {/volist}
+                    </select>
+                    <select class='ipt-xs' name="cl_id">
+                        <option value="">请选择</option>
+                        {volist name="bclassList" id="val"}
+                        <option value="{$val.cl_id}" {if condition="$val.cl_id == $param['cl_id']"}selected{/if}>{$val.cl_name}</option>
+                        {/volist}
+                    </select>
+                    <select style='margin:0 10px;' class='ipt-xs' name="ad_sex">
+                        <option value="">请选择</option>
+                        <option value="1" {if condition=" 1 == $param['ad_sex']"}selected{/if}>男</option>
+                        <option value="2" {if condition=" 2 == $param['ad_sex']"}selected{/if}>女</option>
+
+                    </select>
+                    <button class="btn btn-info">搜索</button>
+                </form>
+            </div>
+        </div>
+
+        <div class='c-table-box'>
+            <table class="layui-table">
+                <colgroup>
+                    <col width="6%">
+                    <col width="10%">
+                    <col width="8%">
+                    <col width="8%">
+                    <col width="7%">
+                    <col width='8%'>
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="7%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th colspan="9">入住学生</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>序号</td>
+                    <td>学号</td>
+                    <td>姓名</td>
+                    <td>性别</td>
+                    <td>校区</td>
+                    <td>年级</td>
+                    <td>班级</td>
+                    <td>身份证</td>
+                    <td>电话</td>
+                </tr>
+                {volist name="list.data" id="val"}
+                <tr id="item-{$val.ad_uid}">
+                    <td>
+                        <input class="select-student" type="checkbox"  name="studentId[]" value="{$val.ad_uid}"/>
+                        {$val.ad_uid}
+                    </td>
+                    <td>{$val.ad_num}</td>
+                    <td>{$val.ad_sname}</td>
+                    <td>{$val.ad_sex==1?'男':'女'}</td>
+                    <td><?= isset($campusList[$val['cp_id']]) ? $campusList[$val['cp_id']]['cp_name'] : '';?></td>
+                    <td>{$val.gd_name}</td>
+                    <td>{$val.cl_name}</td>
+                    <td>{$val.ad_identify}</td>
+                    <td>{$val.ad_tel == '0' ? '': $val.ad_tel}</td>
+                </tr>
+                </tbody>
+                {/volist}
+            </table>
+        </div>
+        <div class='page-box clearfix'>
+            <div style='font-size:16px;color:#333' class='p-l'>
+                <span>共{$list.total}</span>
+                <span>条记录</span>
+            </div>
+            <div class='p-r'>
+                <!-- 分页 -->
+                <div id="c_page">{$page}</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{include file='index/footer' /}
+<script>
+
+    /* 选择校区联动年级 */
+    $(document).on('change','#search_from select[name="campus_id"]',function(){
+        var campus_id = $(this).val();
+        if(campus_id){
+            $.post("{:url('bed_manage/getGrade')}",{campus_id:campus_id},function(res){
+                if(res.status == 1){
+                    var html = '<option value="">请选择</option>';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.gd_id+'">'+ v.gd_name+'</option>';
+                    });
+                    $('#search_from select[name="gd_id"]').html(html);
+                    $('#search_from select[name="cl_id"]').html('<option value="">请选择</option>');
+                }
+            },'json');
+        }else{
+            $('#search_from select[name="gd_id"]').html('<option value="">请选择</option>');
+            $('#search_from select[name="cl_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+    /* 选择年级联动班级 */
+    $(document).on('change','#search_from select[name="gd_id"]',function(){
+        var campus_id = $('#search_from select[name="campus_id"]').val();
+        var gd_id = $(this).val();
+        if(campus_id){
+            $.post("{:url('bed_manage/getBclass')}",{campus_id:campus_id,gd_id:gd_id},function(res){
+                if(res.status == 1){
+                    var html = '<option value="">请选择</option>';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.cl_id+'">'+ v.cl_name+'</option>';
+                    });
+                    $('#search_from select[name="cl_id"]').html(html);
+                }
+            },'json');
+        }else{
+            $('#search_from select[name="cl_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+
+    /* 分配学生宿舍 */
+    $(document).on('click','.js-allot',function(){
+
+        var ids = [];
+        $(".select-student").each(function(){
+
+            if ( $(this).is(':checked'))
+            {
+                ids.push($(this).val());
+            }
+        });
+
+        if ( ids.length == 0 )
+        {
+            layer.msg('请选择需要分配的学生', {icon: 2});
+        }
+        else
+        {
+            var dormitory_id = {$dormitoryInfo.id};
+            if(dormitory_id){
+                $.post("{:url('bed_manage/doAllot')}",{dormitory_id:dormitory_id,ids:ids.join(',')},function(res){
+                    if(res.status == 1)
+                    {
+                        for (var i=0;i<ids.length;i++)
+                        {
+                            $("#item-" + ids[i]).remove();
+                        }
+
+                        layer.msg(res.msg);
+                    }
+                    else
+                    {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                },'json');
+            }else{
+
+                layer.msg('请求错误，请刷新页面再操作。', {icon: 2});
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

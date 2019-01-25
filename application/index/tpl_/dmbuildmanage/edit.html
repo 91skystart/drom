@@ -1,0 +1,261 @@
+{include file='index/header' /}
+{include file='index/menu' /}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <div class='route-box'>
+            <span class='icon icon-position'></span>
+            <span class='title'>当前位置：</span>
+            <span>首页</span>
+            <span>></span>
+            <span><a href="javascript:void(0)" class="menu-nav">人员管理</a></span>
+            <span>></span>
+            <span><a href="javascript:void(0)">楼栋管理员信息</a></span>
+        </div>
+        <div class='search-box'>
+            <div class="ipt-box">
+                <form  action="{:url('Dmbuildmanage/edit')}" method='post'>
+                    <input placeholder="请输入姓名"  name="name" value="{$name}" class='search-ipt' type="text">
+                    <span class='icon-search all-search'></span>
+                </form>
+            </div>
+
+        </div>
+        <div style='margin-top:20px;' class='clearfix'>
+            <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
+                <span class='tab-item'><a  href="{:url('Dmbuildmanage/index')}">添加人员</a></span>
+                <span class='tab-item on'><a   href="{:url('Dmbuildmanage/edit')}">编辑人员</a></span>
+            </div>
+            <div class='p-r'>
+                <form id="search_from" action="{:url('Dmbuildmanage/edit')}" method='post'>
+                    <input placeholder="工号" name="job_num" value="{$job_num}" class="ipt ipt-xs">
+                    <select class='ipt-xs' name="campus_id">
+                        <option value="">请选择</option>
+                        {volist name="campus" id="val"}
+                        <option value="{$val.cp_id}" {if condition="$val.cp_id == $campus_id"}selected{/if}>{$val.cp_name}</option>
+                        {/volist}
+                    </select>
+                    <select style='margin:0 10px;' class='ipt-xs' name="build_id">
+                        <option value="">请选择</option>
+                        {if condition="!empty($build_id)"}
+                        {volist name="build" id="val"}
+                        <option value="{$val.id}" {if condition="$val.id ==$build_id"}selected{/if}>{$val.build_name}</option>
+                        {/volist}
+                        {/if}
+                    </select>
+                    <button class="btn btn-info" type="submit">搜索</button>
+                </form>
+            </div>
+        </div>
+        <div style='' class='ipt-main-box'>
+            <form id="form_name" action="" onsubmit="return false">
+                <input type="hidden" name="id">
+                <div class="ipt-box">
+                    <label for="">校区选择：</label>
+                    <select style='margin:0 10px;' class='ipt-xs' name="campus_id">
+                        <option value="">请选择</option>
+                        {volist name="campus" id="val"}
+                        <option value="{$val.cp_id}">{$val.cp_name}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">楼栋选择：</label>
+                    <select style='margin:0 10px;' class='ipt-xs' name="build_id">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">工号：</label>
+                    <input type="text" class='ipt ipt-xs' name="job_num">
+                </div>
+                <div class="ipt-box">
+                    <label for="">姓名：</label>
+                    <input type="text" class='ipt ipt-xs' name="name">
+                </div>
+                <div class="ipt-box">
+                    <label for="">联系电话：</label>
+                    <input type="text" class='ipt ipt-xs' name="phone">
+                </div>
+                <div class="ipt-box">
+                    <label for="">身份证：</label>
+                    <input type="text" class='ipt ipt-xs' name="idcard">
+                </div>
+                <button class='btn btn-info save'>修改</button>
+            </form>
+        </div>
+        <div class='c-table-box'>
+            <table class="layui-table">
+                <colgroup>
+                    <col width="7%">
+                    <col width="8%">
+                    <col width="10%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="20%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>工号</th>
+                    <th>姓名</th>
+                    <th>校区名称</th>
+                    <th>楼栋名称</th>
+                    <th>联系电话</th>
+                    <th>身份证</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="val"}
+                <tr>
+                    <td>{$val.id}</td>
+                    <td>{$val.job_num}</td>
+                    <td>{$val.name}</td>
+                    <td>{$val.campus.cp_name}</td>
+                    <td>{$val.build.build_name}</td>
+                    <td>{$val.phone}</td>
+                    <td>{$val.idcard}</td>
+                    <td class='opt-td'>
+                        <a href="javascript:void(0)" data-id="{$val.id}" class="delete">删除</a>
+                        <a href="javascript:void(0)" data-id="{$val.id}" class="edit">编辑</a>
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+        <div class='page-box clearfix'>
+            <div style='font-size:16px;color:#333' class='p-l'>
+                <span>共</span>
+                <span style='margin:0 5px'>{$count}</span>
+                <span>条记录</span>
+            </div>
+            <div class='p-r'>
+                <!-- 分页 -->
+                <div id="c_page">{$page}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='index/footer' /}
+<script>
+
+    $(document).on('change','#search_from select[name="campus_id"]',function(){
+        var campus_id = $(this).val();
+        if(campus_id){
+            $.post("{:url('tools/getbuild')}",{campus_id:campus_id},function(res){
+                if(res.status == 1){
+                    var html = '';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.id+'">'+ v.build_name+'</option>';
+                    });
+                    if(html){
+                        $('#search_from select[name="build_id"]').html(html);
+                    }
+                    else
+                    {
+                        $('#search_from select[name="build_id"]').html('<option value="">请选择</option>');
+                    }
+                }
+            },'json');
+        }else{
+            $('#search_from select[name="build_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+
+    $(document).on('change','#form_name select[name="campus_id"]',function(){
+        var campus_id = $(this).val();
+        if(campus_id){
+            $.post("{:url('tools/getbuild')}",{campus_id:campus_id},function(res){
+                if(res.status == 1){
+                    var html = '';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.id+'">'+ v.build_name+'</option>';
+                    });
+                    if(html){
+                        $('#form_name select[name="build_id"]').html(html);
+                    }
+                    else
+                    {
+                        $('#form_name select[name="build_id"]').html('<option value="">请选择</option>');
+                    }
+                }
+            },'json');
+        }else{
+            $('#form_name select[name="build_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+    $(document).on('click','.save',function(){
+
+        var id = $("#form_name input[name='id']").val();
+        if ( !id )
+        {
+            layer.msg('请选择需要编辑的楼管', {icon: 2});
+            return;
+        }
+
+        var data = $("#form_name").serializeArray();
+
+        if(data){
+            $.post("{:url('Dmbuildmanage/update')}",data,function(res){
+                if(res.status == 1){
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout('location.reload()',3000);
+                }else{
+                    layer.msg(res.msg, {icon: 2});
+                }
+            },'json');
+        }
+    });
+
+    $(document).on('click','.edit',function(){
+        var id = $(this).attr('data-id');
+
+        if(id){
+            $.post("{:url('Dmbuildmanage/getInfo')}",{id:id},function(res){
+                if(res.status == 1){
+                    $('#form_name').find('input[name="id"]').val(res.data.id);
+                    $('#form_name').find('select[name="campus_id"]').val(res.data.campus_id);
+
+                    var build_html = '';
+                    $.each(res.build,function(k,v){
+                        build_html+='<option value="'+v.id+'">'+v.build_name+'</option>';
+                    });
+                    $('#form_name').find('select[name="build_id"]').html(build_html);
+
+                    $('#form_name').find('select[name="build_id"]').val(res.data.build_id);
+                    $('#form_name').find('input[name="job_num"]').val(res.data.job_num);
+                    $('#form_name').find('input[name="name"]').val(res.data.name);
+                    $('#form_name').find('input[name="phone"]').val(res.data.phone);
+                    $('#form_name').find('input[name="idcard"]').val(res.data.idcard);
+                }
+            },'json');
+        }
+    });
+
+    $(document).on('click','.delete',function(){
+        var id = $(this).attr('data-id');
+
+        if(id)
+        {
+            layer.confirm('是否确认删除', {icon: 3, title:'删除操作'}, function(index){
+                layer.close(index);
+                $.post("{:url('Dmbuildmanage/delete')}",{id:id},function(res){
+                    if(res.status == 1){
+                        layer.msg(res.msg, {icon: 1});
+                        setTimeout('location.reload()',3000);
+                    }else{
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                },'json');
+            });
+        }
+    });
+</script>
+</body>
+</html>

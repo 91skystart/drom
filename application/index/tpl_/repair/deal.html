@@ -1,0 +1,409 @@
+{include file='index/header' /}
+{include file='index/menu' /}
+
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <div class='route-box'>
+            <span class='icon icon-position'></span>
+            <span class='title'>当前位置：</span>
+            <span>首页</span>
+            <span>></span>
+            <span><a href="javascript:void(0)">物品损坏维修管理</a></span>
+        </div>
+        <div class='search-box'>
+            <div class="ipt-box">
+                <form  action="{:url('repair/deal')}" method='post'>
+                    <input placeholder="请输入姓名" value="{$paramData['keywords']}" name="keywords" class='search-ipt' type="text">
+                    <span class='icon-search all-search'></span>
+                </form>
+            </div>
+        </div>
+        <div style='margin-top:20px;' class='clearfix'>
+            <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
+                <span class="tab-item"><a  href="{:url('repair/index')}">故障报修登记</a></span>
+                <span class="tab-item on"><a  href="{:url('repair/undeal')}">故障报修处理</a></span>
+            </div>
+        </div>
+
+        <div style='' class='ipt-main-box'>
+            <form id="editForm" action="" onsubmit="return false">
+                <input type="hidden" name="id" value=""/>
+                <div class="ipt-box ">
+                    <label for="">申报人：</label>
+                    <input type="text" class='ipt ipt-xs' name="name">
+                </div>
+                <div class="ipt-box">
+                    <label for="">校区：</label>
+                    <select class='ipt-xs select-campus' name="campus_id" >
+                        <option value="">请选择</option>
+                        {volist name="campusList" id="campusInfo"}
+                        <option value="{$campusInfo.cp_id}" >{$campusInfo.cp_name}</option>
+                        {/volist}
+
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">楼栋名称：</label>
+                    <select class='ipt-xs select-build' name="build_id">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">层数：</label>
+                    <select class='ipt-xs select-floor' name="floor_id">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">房号：</label>
+                    <select class='ipt-xs select-dormitory' name="dormitory_id">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+
+                <div class="ipt-box">
+                    <label for="">故障类型：</label>
+                    <select class='ipt-xs' name="type">
+                        <option value="">请选择</option>
+                        {volist name="type" id="v" key ="k"}
+                        <option value="{$k}" >{$v}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <div class="ipt-box" style="width: 512px;">
+                    <label for="">故障内容：</label>
+                    <input type="text" class='ipt ipt-xs' name="info" style="width:396px;">
+                </div>
+
+                <div class="ipt-box">
+                    <label for="">收费：</label>
+                    <input type="text" class='ipt ipt-xs' name="charge">
+                </div>
+                <div class="ipt-box">
+                    <label for="">电话：</label>
+                    <input type="text" class='ipt ipt-xs' name="phone">
+                </div>
+                <div class="ipt-box">
+                    <label for="">处理日期：</label>
+                    <input type="text" class='ipt ipt-xs' name="handle_date">
+                </div>
+                <div class="ipt-box">
+                    <label for="">施工员：</label>
+                    <input type="text" class='ipt ipt-xs' name="construction">
+                </div>
+            </form>
+
+            <div class="ipt-box" style="text-align: center;margin:0 0 20px 0;width: 83%" >
+                <button class="btn btn-info js-save" data-disable="true" >提交</button>
+            </div>
+        </div>
+
+        <div class='c-table-box'>
+            <table class="layui-table">
+                <colgroup>
+                    <col width="5%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="6%">
+                    <col width="5%">
+                    <col width="10%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <!--<col width="12%">-->
+                </colgroup>
+                <thead>
+                <tr>
+                    <th colspan="6" class="repair-tab-nav">
+                        <a class="repair-tab" href="{:url('repair/undeal')}"> 未处理故障列表 </a>
+                        <a class="repair-tab on" href="{:url('repair/deal')}">故障报修处理列表</a>
+                    </th>
+                </tr>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>校区</th>
+                    <th>楼栋名称</th>
+                    <th>楼层名称</th>
+                    <th>房间号</th>
+                    <th>故障类型</th>
+                    <th>故障内容</th>
+                    <th>收费</th>
+                    <th>电话</th>
+                    <th>处理日期</th>
+                    <th>施工员</th>                   
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list.data" id="val"}
+                <tr>
+                    <td>{$val.id}</td>
+                    <td>{$val.name}</td>
+                    <td>{$val.campus.cp_name}</td>
+                    <td>{$val.build.build_name}</td>
+                    <td>{$val.floor.floor_name}</td>
+                    <td>{$val.dormitory.room_num}</td>
+                    <td>{$type[$val.type]}</td>
+                    <td>{$val.info}</td>
+                    <td>{$val.charge}</td>
+                    <td>{$val.phone}</td>
+                    <td>{$val.handle_date|date='Y-m-d',###}</td>
+                    <td>{$val.construction}</td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+        <div class='page-box clearfix'>
+            <div style='font-size:16px;color:#333' class='p-l'>
+                <span>共</span>
+                <span style='margin:0 5px'>{$list.total}</span>
+                <span>条记录</span>
+            </div>
+            <div class='p-r'>
+                <!-- 分页 -->
+                <div id="c_page">{$page}</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{include file='index/footer' /}
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#editForm input[name="handle_date"]',
+            format: 'yyyy-MM-dd'
+        });
+    });
+
+    /* 校区选择 */
+    $(document).on('change','.select-campus',function(){
+
+        var campus_id = $(this).val();
+
+        if(campus_id)
+        {
+            $.post("{:url('tools/getbuild')}",{campus_id:campus_id},function(res){
+                if(res.status == 1)
+                {
+                    var html = '<option value="">请选择</option>';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.id+'">'+ v.build_name+'</option>';
+                    });
+                    $('#editForm select[name="build_id"]').html(html);
+                    $('#editForm select[name="floor_id"]').html('<option value="">请选择</option>');
+                    $('#editForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
+                }
+            },'json');
+        }
+        else
+        {
+            $('#editForm select[name="build_id"]').html('<option value="">请选择</option>');
+            $('#editForm select[name="floor_id"]').html('<option value="">请选择</option>');
+            $('#editForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+
+    /* 楼栋选择 */
+    $(document).on('change','.select-build',function(){
+
+        var campus_id = $('#editForm select[name="campus_id"]').val();
+        var build_id = $(this).val();
+
+        if(campus_id && build_id)
+        {
+            $.post("{:url('tools/getFloor')}",{campus_id:campus_id,build_id:build_id},function(res){
+                if(res.status == 1)
+                {
+                    var html = '<option value="">请选择</option>';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.id+'">'+ v.floor_name+'</option>';
+                    });
+                    $('#editForm select[name="floor_id"]').html(html);
+                    $('#editForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
+                }
+            },'json');
+        }
+        else
+        {
+            $('#editForm select[name="floor_id"]').html('<option value="">请选择</option>');
+            $('#editForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+
+    /* 楼层选择 */
+    $(document).on('change','.select-floor',function(){
+
+        var campus_id = $('#editForm select[name="campus_id"]').val();
+        var build_id = $('#editForm select[name="build_id"]').val();
+        var floor_id = $(this).val();
+
+        if(campus_id && build_id && floor_id)
+        {
+            $.post("{:url('tools/getRoom')}",{campus_id:campus_id,build_id:build_id,floor_id:floor_id},function(res){
+                if(res.status == 1){
+                    var html = '<option value="">请选择</option>';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.id+'">'+ v.room_num+'</option>';
+                    });
+                    $('#editForm select[name="dormitory_id"]').html(html);
+                }
+            },'json');
+        }else{
+            $('#editForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+
+    /* 报修处理 */
+    $(document).on('click', '.js-deal',function(){
+
+        var id = $(this).attr("data-id");
+        if ( id == '' )
+        {
+            layer.msg('请选择需要处理的报修故障！', {icon: 2});
+            return;
+        }
+
+        $.get("{:url('repair/getReport')}",{id:id},function(res){
+            if(res.status == 1)
+            {
+                var info = res.data.info;
+
+                var buildHtml = '';
+                $.each(res.data.build, function(k, v) {
+
+                    buildHtml+= '<option value="'+ v.id+'">'+ v.build_name+'</option>';
+                });
+
+                var floorHtml = '';
+                $.each(res.data.floor, function(k, v) {
+
+                    floorHtml+= '<option value="'+ v.id+'">'+ v.floor_name+'</option>';
+                });
+
+                var dormitoryHtml = '';
+                $.each(res.data.dormitory, function(k, v) {
+
+                    dormitoryHtml+= '<option value="'+ v.id+'">'+ v.room_num+'</option>';
+                });
+
+                $('#editForm input[name="id"]').val(info.id);
+                $('#editForm input[name="name"]').val(info.name);
+                $('#editForm select[name="campus_id"]').val(info.campus_id);
+                $('#editForm select[name="build_id"]').html(buildHtml).val(info.build_id);
+                $('#editForm select[name="floor_id"]').html(floorHtml).val(info.floor_id);
+                $('#editForm select[name="dormitory_id"]').html(dormitoryHtml).val(info.dormitory_id);
+                $('#editForm select[name="type"]').val(info.type);
+                $('#editForm input[name="info"]').val(info.info);
+                $('#editForm input[name="charge"]').val(info.charge);
+                $('#editForm input[name="phone"]').val(info.phone);
+            }
+            else
+            {
+                layer.msg(res.msg, {icon: 2});
+            }
+        },'json');
+
+    });
+
+
+    /* 保存报修处理操作 */
+    $(document).on('click','.js-save',function(){
+
+        var name = $('#editForm input[name="name"]').val();
+        if ( name == '' )
+        {
+            layer.msg('请填写申报人姓名！', {icon: 2});
+            return;
+        }
+
+        var dormitory_id = $('#editForm select[name="dormitory_id"]').val();
+        if ( !dormitory_id )
+        {
+            layer.msg('请选择房号！', {icon: 2});
+            return;
+        }
+
+        var type = $('#editForm select[name="type"]').val();
+        if ( !type )
+        {
+            layer.msg('请选择故障类型！', {icon: 2});
+            return;
+        }
+
+        var info = $('#editForm input[name="info"]').val();
+        if ( info == '' )
+        {
+            layer.msg('请填写故障内容！', {icon: 2});
+            return;
+        }
+
+        var charge = $('#editForm input[name="charge"]').val();
+        if ( !charge )
+        {
+            layer.msg('请填写收费金额！', {icon: 2});
+            return;
+        }
+
+        var phone = $('#editForm input[name="phone"]').val();
+        if ( !phone )
+        {
+            layer.msg('请填写电话！', {icon: 2});
+            return;
+        }
+
+        var handleDate = $('#editForm input[name="handle_date"]').val();
+        if ( handleDate == '')
+        {
+            layer.msg('请填写处理日期！', {icon: 2});
+            return;
+        }
+
+        var construction = $('#editForm input[name="construction"]').val();
+        if ( construction == '')
+        {
+            layer.msg('请填写施工人员！', {icon: 2});
+            return;
+        }
+
+        var data = $("#editForm").serializeArray();
+        var obj = $(this);
+        if(data){
+
+            if ( obj.attr("data-disable") != 'true')
+            {
+                return;
+            }
+            obj.attr("data-disable",'false');
+
+            $.post("{:url('repair/dealReport')}",data,function(res){
+                if(res.status == 1)
+                {
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout('location.reload()',3000);
+                }
+                else
+                {
+                    obj.attr("data-disable",'true');
+                    layer.msg(res.msg, {icon: 2});
+                }
+            },'json');
+        }
+    });
+
+
+</script>
+</body>
+</html>

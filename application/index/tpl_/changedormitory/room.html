@@ -1,0 +1,232 @@
+{include file='index/header' /}
+{include file='index/menu' /}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <div class='route-box'>
+            <span class='icon icon-position'></span>
+            <span class='title'>当前位置：</span>
+            <span>首页</span>
+            <span>></span>
+            <span><a href="javascript:void(0)" class="menu-nav">人员管理</a></span>
+            <span>></span>
+            <span><a href="javasscript:void(0)">换/退宿舍</a></span>
+        </div>
+
+        <div style='margin-top:20px;' class='clearfix'>
+            <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
+                <span class='tab-item'><a href="{:url('changedormitory/index')}">学生调往空宿舍</a></span>
+                <span class='tab-item'><a href="{:url('changedormitory/student')}">学生对调</a></span>
+                <span class='tab-item'><a href="{:url('changedormitory/emptyRoom')}">整间宿舍调往空宿舍</a></span>
+                <span class='tab-item on'><a href="{:url('changedormitory/room')}">两件宿舍对调</a></span>
+            </div>
+        </div>
+        <form id="form_name" action="" onsubmit="return false">
+            <input type="hidden" name="campus_id" value=""/>
+            <input type="hidden" name="stay_id" value=""/>
+            <div class="ipt-box" style="font-size:15px;">宿舍一</div>
+            <div style='' class='ipt-main-box' data-type="from">
+                <div class="ipt-box">
+                    <label for="">校区：</label>
+                    <select class='ipt-xs select-campus' name="from_campus_id" >
+                        <option value="">请选择</option>
+                        {volist name="campusList" id="campusInfo"}
+                        <option value="{$campusInfo.cp_id}" >{$campusInfo.cp_name}</option>
+                        {/volist}
+
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">楼栋名称：</label>
+                    <select class='ipt-xs select-build' name="from_build_id">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">层数：</label>
+                    <select class='ipt-xs select-floor' name="from_floor_id">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">房号：</label>
+                    <select class='ipt-xs select-dormitory' name="from_dormitory_id">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="ipt-box" style="font-size: 15px;">宿舍二</div>
+            <div style='' class='ipt-main-box' data-type="to">
+                <div class="ipt-box">
+                    <label for="">校区：</label>
+                    <select class='ipt-xs select-campus' name="to_campus_id" >
+                        <option value="">请选择</option>
+                        {volist name="campusList" id="campusInfo"}
+                        <option value="{$campusInfo.cp_id}" >{$campusInfo.cp_name}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">楼栋名称：</label>
+                    <select class='ipt-xs select-build' name="to_build_id">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">层数：</label>
+                    <select class='ipt-xs select-floor' name="to_floor_id">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">房号：</label>
+                    <select class='ipt-xs select-dormitory' name="to_dormitory_id">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="ipt-box" style="text-align: center;margin:0 0 20px 0;width: 83%" >
+                <button class="btn btn-info js-exchange" data-disable="true">宿舍对调</button>
+            </div>
+              
+        </form>
+        <div class='c-table-box' style="color:#1D4A9F;line-height:30px;font-size: 15px;">
+            <span>宿舍调整规章制度</span>
+            <p>1、如果是住有学生的两个宿舍调整，在宿舍一和宿舍二总选择2个宿舍，点“宿舍对调”完成调宿。</p>
+            <p>2、如果是从住有学生的宿舍调整到空宿舍，应该在宿舍一中选择住有人的宿舍，然后在宿舍二中选择空宿舍，最后点击“宿舍调往”完成调宿。</p>
+        </div>
+    </div>
+</div>
+{include file='index/footer' /}
+<script>
+
+    /* 校区选择 */
+    $(document).on('change','.select-campus',function(){
+
+        var type = $(this).parent().parent().attr("data-type") + '_';
+        var campus_id = $(this).val();
+
+        if(campus_id)
+        {
+            $.post("{:url('tools/getbuild')}",{campus_id:campus_id},function(res){
+                if(res.status == 1)
+                {
+                    var html = '<option value="">请选择</option>';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.id+'">'+ v.build_name+'</option>';
+                    });
+                    $('#form_name select[name="'+ type +'build_id"]').html(html);
+                    $('#form_name select[name="'+ type +'floor_id"]').html('<option value="">请选择</option>');
+                    $('#form_name select[name="'+ type +'dormitory_id"]').html('<option value="">请选择</option>');
+                }
+            },'json');
+        }
+        else
+        {
+            $('#form_name select[name="'+ type +'build_id"]').html('<option value="">请选择</option>');
+            $('#form_name select[name="'+ type +'floor_id"]').html('<option value="">请选择</option>');
+            $('#form_name select[name="'+ type +'dormitory_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+
+    /* 楼栋选择 */
+    $(document).on('change','.select-build',function(){
+
+        var type = $(this).parent().parent().attr("data-type") + '_';
+        var campus_id = $('#form_name select[name="'+type+'campus_id"]').val();
+        var build_id = $(this).val();
+
+        if(campus_id && build_id)
+        {
+            $.post("{:url('tools/getFloor')}",{campus_id:campus_id,build_id:build_id},function(res){
+                if(res.status == 1)
+                {
+                    var html = '<option value="">请选择</option>';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.id+'">'+ v.floor_name+'</option>';
+                    });
+                    $('#form_name select[name="'+ type +'floor_id"]').html(html);
+                    $('#form_name select[name="'+ type +'dormitory_id"]').html('<option value="">请选择</option>');
+                }
+            },'json');
+        }
+        else
+        {
+            $('#form_name select[name="'+ type +'floor_id"]').html('<option value="">请选择</option>');
+            $('#form_name select[name="'+ type +'dormitory_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+
+    /* 楼层选择 */
+    $(document).on('change','.select-floor',function(){
+
+        var type = $(this).parent().parent().attr("data-type") + '_';
+        var campus_id = $('#form_name select[name="'+type+'campus_id"]').val();
+        var build_id = $('#form_name select[name="'+type+'build_id"]').val();
+        var floor_id = $(this).val();
+
+        if(campus_id && build_id && floor_id)
+        {
+            $.post("{:url('changedormitory/getEmptyRoom')}",{campus_id:campus_id,build_id:build_id,floor_id:floor_id},function(res){
+                if(res.status == 1){
+                    var html = '<option value="">请选择</option>';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.id+'">'+ v.room_num+'</option>';
+                    });
+                    $('#form_name select[name="'+ type +'dormitory_id"]').html(html);
+                }
+            },'json');
+        }else{
+            $('#form_name select[name="'+ type +'dormitory_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+
+    /* 宿舍对调 */
+    $(document).on('click','.js-exchange',function(){
+
+        var fromDomitoryId = $('#form_name select[name="from_dormitory_id"]').val();
+        var toDomitoryId = $('#form_name select[name="to_dormitory_id"]').val();
+
+        if ( !fromDomitoryId )
+        {
+            layer.msg('请选择要调换的宿舍一', {icon: 2});
+            return ;
+        }
+
+
+        if ( !toDomitoryId )
+        {
+            layer.msg('请选择要调换到的宿舍二', {icon: 2});
+            return ;
+        }
+
+        var data = $("#form_name").serializeArray();
+        var obj = $(this);
+        if(data){
+
+            if ( obj.attr("data-disable") != 'true')
+            {
+                return;
+            }
+            obj.attr("data-disable",'false');
+            $.post("{:url('changedormitory/roomToRoom')}",data,function(res){
+                if(res.status == 1)
+                {
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout('location.reload()',5000);
+                }
+                else
+                {
+                    obj.attr("data-disable",'true');
+                    layer.msg(res.msg, {icon: 2});
+                }
+            },'json');
+        }
+    });
+
+</script>
+</body>
+</html>
