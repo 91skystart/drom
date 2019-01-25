@@ -1,0 +1,33 @@
+.pagination{
+    display:block;
+    width:600px;
+    height:20px;
+    line-height: 20px;
+    text-align: right;
+}
+.pagination li{
+    display: inline;
+    height:20px;
+    line-height: 20px;
+}
+.pagination li span{
+    height:20px;
+    line-height: 20px;
+    display: inline-block;
+    padding:2px 8px;
+    background-color:#2a52b1;
+    color:#fff;
+    border:1px solid #eee;
+    border-radius:4px;
+    margin:0 5px;
+
+}
+.pagination li a{
+    height:20px;
+    line-height: 20px;
+    display: inline-block;
+    padding:2px 8px;
+    border-radius:4px;
+    border:1px solid #e5e5e5;
+    margin:0 5px;
+}
