@@ -1,0 +1,201 @@
+{include file='index/header' /}
+{include file='index/menu' /}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <div class='route-box'>
+            <span class='icon icon-position'></span>
+            <span class='title'>当前位置：</span>
+            <span>首页</span>
+            <span>></span>
+            <span><a href="javascript:void(0)" class="menu-nav">人员管理</a></span>
+            <span>></span>
+            <span><a href="javascript:void(0)">学生入住</a></span>
+        </div>
+        <div class='search-box'>
+          <div class="ipt-box">
+              <form  action="{:url('dmstay/index')}" method='post'>
+                  <input placeholder="请输入学生姓名"  name="name" value="{$name}" class='search-ipt' type="text">
+                  <span class='icon-search all-search'></span>
+              </form>
+          </div>
+          
+        </div>
+        <div style='margin-top:20px;' class='clearfix'>
+                <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
+                    <span class='tab-item on'><a  href="{:url('dmstay/index')}">人员信息</a></span>
+                </div>
+                <div class='p-r'>
+                    <form id="search_from" action="{:url('dmstay/index')}" method='post'>
+                        <input placeholder="学号" name="student_num" class="ipt ipt-xs" value="{$student_num}">
+
+                        <select style='margin:0 10px;' class='ipt-xs' name="campus_id">
+                            <option value="">请选择</option>
+                            {volist name="campus" id="val"}
+                            <option value="{$val.cp_id}" {if condition="$val.cp_id == $campus_id"}selected{/if}>{$val.cp_name}</option>
+                            {/volist}
+                        </select>
+                        <select style='margin:0 10px;' class='ipt-xs' name="build_id">
+                            <option value="">请选择</option>
+                            {if condition="!empty($build_id) || !empty($campus_id)"}
+                            {volist name="build" id="val"}
+                            {if condition="$campus_id == $val.campus_id"}
+                            <option value="{$val.id}" {if condition="$val.id ==$build_id"}selected{/if}>{$val.build_name}</option>
+                            {/if}
+                            {/volist}
+                            {/if}
+                        </select>
+                        <select class='ipt-xs' name="floor_id">
+                            <option value="">请选择</option>
+                            {if condition="!empty($floor_id) || !empty($build_id)"}
+                            {volist name="floor" id="val"}
+                            {if condition="$build_id == $val.build_id"}
+                            <option value="{$val.id}" {if condition="$val.id ==$floor_id"}selected{/if}>{$val.floor_name}</option>
+                            {/if}
+                            {/volist}
+                            {/if}
+                        </select>
+                        <select style='margin:0 10px;' class='ipt-xs' name="dormitory_id">
+                            <option value="">请选择</option>
+                            {if condition="!empty($floor_id) || !empty($dormitory_id)"}
+                            {volist name="dormitory" id="val"}
+                            {if condition="$floor_id == $val.floor_id"}
+                            <option value="{$val.id}" {if condition="$val.id ==$dormitory_id"}selected{/if}>{$val.room_num}</option>
+                            {/if}
+                            {/volist}
+                            {/if}
+                        </select>
+                        <button class="btn btn-info">搜索</button>
+                    </form>
+                </div>
+        </div>
+
+        <div class='c-table-box'>
+            <table class="layui-table">
+                <colgroup>
+                    <col width="6%">
+                    <col width="10%">
+                    <col width="8%">
+                    <col width="8%">
+                    <col width='8%'>
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="7%">
+                    <col width="8%">
+                    <col width='6%'>
+                    <col width="6%">
+                    <col width="6%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>校区</th>
+                        <th>楼栋名称</th>
+                        <th>楼层名称</th>
+                        <th>房间号</th>
+                        <th>年级</th>
+                        <th>班级</th>
+                        <th>电话</th>
+                        <th>身份证</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                {volist name="list" id="val"}
+                    <tr>
+                        <td>{$val.id}</td>
+                        <td>{$val.student_num}</td>
+                        <td>{$val.name}</td>
+                        <td>{$val.sex==1?'男':'女'}</td>
+                        <td>{$val.campus.cp_name}</td>
+                        <td>{$val.build.build_name}</td>
+                        <td>{$val.floor.floor_name}</td>
+                        <td>{$val.dormitory.room_num}</td>
+                        <td>{$val.grade.gd_name}</td>
+                        <td>{$val.bclass.cl_name}</td>
+                        <td>{$val.phone != '0'  ? $val.phone : '';}</td>
+                        <td>{$val.idcard}</td>
+                    </tr>
+                </tbody>
+                {/volist}
+            </table>
+        </div>
+        <div class='page-box clearfix'>
+            <div style='font-size:16px;color:#333' class='p-l'>
+                <span>共</span>
+                <span style='margin:0 5px'>{$count}</span>
+                <span>条记录</span>
+            </div>
+            <div class='p-r'>
+                <!-- 分页 -->
+                <div id="c_page">{$page}</div>
+            </div>
+        </div>
+    </div>
+
+  </div>
+{include file='index/footer' /}
+<script>
+
+    $(document).on('change','#search_from select[name="campus_id"]',function(){
+        var campus_id = $(this).val();
+        if(campus_id){
+            $.post("{:url('tools/getbuild')}",{campus_id:campus_id},function(res){
+                if(res.status == 1){
+                    var html = '<option value="">请选择</option>';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.id+'">'+ v.build_name+'</option>';
+                    });
+                    $('#search_from select[name="build_id"]').html(html);
+                }
+            },'json');
+        }else{
+            $('#search_from select[name="build_id"]').html('<option value="">请选择</option>');
+            $('#search_from select[name="floor_id"]').html('<option value="">请选择</option>');
+            $('#search_from select[name="dormitory_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+    $(document).on('change','#search_from select[name="build_id"]',function(){
+        var campus_id = $('#search_from select[name="campus_id"]').val();
+        var build_id = $(this).val();
+        if(campus_id && build_id){
+            $.post("{:url('tools/getFloor')}",{campus_id:campus_id,build_id:build_id},function(res){
+                if(res.status == 1){
+                    var html = '<option value="">请选择</option>';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.id+'">'+ v.floor_name+'</option>';
+                    });
+                    $('#search_from select[name="floor_id"]').html(html);
+                }
+            },'json');
+        }else{
+            $('#search_from select[name="floor_id"]').html('<option value="">请选择</option>');
+            $('#search_from select[name="dormitory_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+    $(document).on('change','#search_from select[name="floor_id"]',function(){
+        var campus_id = $('#search_from select[name="campus_id"]').val();
+        var build_id = $('#search_from select[name="build_id"]').val();
+        var floor_id = $(this).val();
+        if(campus_id && build_id && floor_id){
+            $.post("{:url('tools/getRoom')}",{campus_id:campus_id,build_id:build_id,floor_id:floor_id},function(res){
+                if(res.status == 1){
+                    var html = '<option value="">请选择</option>';
+                    $.each(res.data, function(k, v) {
+                        html+= '<option value="'+ v.id+'">'+ v.room_num+'</option>';
+                    });
+                    $('#search_from select[name="dormitory_id"]').html(html);
+                }
+            },'json');
+        }else{
+            $('#search_from select[name="dormitory_id"]').html('<option value="">请选择</option>');
+        }
+    });
+
+</script>
+</body>
+</html>

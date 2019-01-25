@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:58:"../application/index/tpl/dormitory_hygiene\statistics.html";i:1547171335;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:43:"../application/index/tpl/visiter\outer.html";i:1545290388;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -115,33 +115,56 @@
             <span class='title'>当前位置：</span>
             <span>首页</span>
             <span>></span>
-            <span><a href="javascript:void(0)" style="color: #666;">量化考核管理</a></span>
+            <span><a href="javascript:void(0)" class="menu-nav">人员管理</a></span>
             <span>></span>
-            <span><a href="javascript:void(0)">卫生量化考核</a></span>
+            <span><a href="javascript:void(0)">外来人员管理</a></span>
         </div>
-        <div class='search-box' style="display:none;">
+        <div class='search-box'>
             <div class="ipt-box">
-                <form  action="<?php echo url('dormitoryHygiene/index'); ?>" method='post'>
-                    <input placeholder="请输入姓名" value="" name="keywords" class='search-ipt' type="text">
+                <form  action="<?php echo url('visiter/index'); ?>" method='post'>
+                    <input placeholder="请输入姓名" value="<?php echo $paramData['keywords']; ?>" name="keywords" class='search-ipt' type="text">
                     <span class='icon-search all-search'></span>
                 </form>
             </div>
         </div>
         <div style='margin-top:20px;' class='clearfix'>
             <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
-                <span class="tab-item "><a  href="<?php echo url('dormitoryHygiene/index'); ?>">宿舍卫生检查</a></span>
-                <span class="tab-item on"><a  href="<?php echo url('dormitoryHygiene/statistics'); ?>">宿舍卫生检查统计</a></span>
+                <span class="tab-item"><a  href="<?php echo url('visiter/index'); ?>">老师来访</a></span>
+                <span class="tab-item on"><a  href="<?php echo url('visiter/outer'); ?>">外来人员登记</a></span>
             </div>
         </div>
 
         <div style='' class='ipt-main-box'>
-            <form id="addForm" action="<?php echo url('dormitoryHygiene/statistics'); ?>" method='post'>
+            <form id="addForm" action="" onsubmit="return false">
+                <input type="hidden" name="id" value=""/>
+                <input type="hidden" name="type" value="2"/>
+                <div class="ipt-box ">
+                    <label for="">来访人姓名：</label>
+                    <input type="text" class='ipt ipt-xs' name="name">
+                </div>
+                <div class="ipt-box">
+                    <label for="">与被访人关系：</label>
+                    <input type="text" class='ipt ipt-xs' name="interviewed_relation">
+                </div>
+                <div class="ipt-box">
+                    <label for="">性别：</label>
+                    <select class='ipt-xs' name="sex">
+                        <option value="">请选择</option>
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                    </select>
+                </div>
+                <div class="ipt-box">
+                    <label for="">身份证：</label>
+                    <input type="text" class='ipt ipt-xs' name="idcard">
+                </div>
+
                 <div class="ipt-box">
                     <label for="">校区：</label>
                     <select class='ipt-xs select-campus' name="campus_id" >
                         <option value="">请选择</option>
                         <?php if(is_array($campusList) || $campusList instanceof \think\Collection || $campusList instanceof \think\Paginator): $i = 0; $__LIST__ = $campusList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$campusInfo): $mod = ($i % 2 );++$i;?>
-                        <option value="<?php echo $campusInfo['cp_id']; ?>" <?php if($campusInfo['cp_id'] == $paramData['campus_id']): ?>selected<?php endif; ?>><?php echo $campusInfo['cp_name']; ?></option>
+                        <option value="<?php echo $campusInfo['cp_id']; ?>" ><?php echo $campusInfo['cp_name']; ?></option>
                         <?php endforeach; endif; else: echo "" ;endif; ?>
 
                     </select>
@@ -150,84 +173,86 @@
                     <label for="">楼栋名称：</label>
                     <select class='ipt-xs select-build' name="build_id">
                         <option value="">请选择</option>
-                        <?php if(is_array($buildList) || $buildList instanceof \think\Collection || $buildList instanceof \think\Paginator): $i = 0; $__LIST__ = $buildList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$buildInfo): $mod = ($i % 2 );++$i;?>
-                        <option value="<?php echo $buildInfo['id']; ?>" <?php if($buildInfo['id'] == $paramData['build_id']): ?>selected<?php endif; ?>><?php echo $buildInfo['build_name']; ?></option>
-                        <?php endforeach; endif; else: echo "" ;endif; ?>
                     </select>
                 </div>
                 <div class="ipt-box">
                     <label for="">层数：</label>
                     <select class='ipt-xs select-floor' name="floor_id">
                         <option value="">请选择</option>
-                        <?php if(is_array($floorList) || $floorList instanceof \think\Collection || $floorList instanceof \think\Paginator): $i = 0; $__LIST__ = $floorList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$floorInfo): $mod = ($i % 2 );++$i;?>
-                        <option value="<?php echo $floorInfo['id']; ?>" <?php if($floorInfo['id'] == $paramData['floor_id']): ?>selected<?php endif; ?>><?php echo $floorInfo['floor_name']; ?></option>
-                        <?php endforeach; endif; else: echo "" ;endif; ?>
                     </select>
                 </div>
                 <div class="ipt-box">
                     <label for="">房号：</label>
                     <select class='ipt-xs select-dormitory' name="dormitory_id">
                         <option value="">请选择</option>
-                        <?php if(is_array($dormitoryList) || $dormitoryList instanceof \think\Collection || $dormitoryList instanceof \think\Paginator): $i = 0; $__LIST__ = $dormitoryList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$dormitoryInfo): $mod = ($i % 2 );++$i;?>
-                        <option value="<?php echo $dormitoryInfo['id']; ?>" <?php if($dormitoryInfo['id'] == $paramData['dormitory_id']): ?>selected<?php endif; ?>><?php echo $dormitoryInfo['room_num']; ?></option>
-                        <?php endforeach; endif; else: echo "" ;endif; ?>
                     </select>
                 </div>
+
                 <div class="ipt-box">
-                    <label for="">年级：</label>
-                    <select class='ipt-xs' name="gd_id">
-                        <option value="">请选择</option>
-                        <?php if(is_array($gradeList) || $gradeList instanceof \think\Collection || $gradeList instanceof \think\Paginator): $i = 0; $__LIST__ = $gradeList;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$gradeInfo): $mod = ($i % 2 );++$i;?>
-                        <option value="<?php echo $gradeInfo['gd_id']; ?>" <?php if($paramData['gd_id'] == $gradeInfo['gd_id']): ?>selected<?php endif; ?> ><?php echo $gradeInfo['gd_name']; ?></option>
-                        <?php endforeach; endif; else: echo "" ;endif; ?>
-                    </select>
+                    <label for="">被访人姓名：</label>
+                    <input type="text" class='ipt ipt-xs' name="interviewed">
+                </div>
+
+                <div class="ipt-box">
+                    <label for="">进入时间：</label>
+                    <input type="text" class='ipt ipt-xs'  style="width:145px;" name="into_date">
                 </div>
                 <div class="ipt-box">
-                    <label for="">宿舍得分：</label>
-                    <input type="text" class='ipt ipt-xs' name="score" placeholder="" value="<?php echo $paramData['score']>0?$paramData['score'] : ''; ?>"/>
+                    <label for="">离开时间：</label>
+                    <input type="text" class='ipt ipt-xs' style="width:145px;" name="out_date">
                 </div>
-                <button class="btn btn-info" onclick="$('#addForm').submit()">搜索</button>
             </form>
+
+            <div class="ipt-box" style="text-align: center;margin:0 0 20px 0;width: 83%" >
+                <button class="btn btn-info js-save" data-disable="true" >录入</button>
+            </div>
         </div>
 
         <div class='c-table-box'>
             <table class="layui-table">
                 <colgroup>
                     <col width="5%">
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="6%">
-                    <col width="10%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <col width="7%">
+                    <!--<col width="12%">-->
                 </colgroup>
                 <thead>
                 <tr>
                     <th>序号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
                     <th>校区</th>
+                    <th>与被访人关系</th>
+                    <th>被访人姓名</th>
                     <th>楼栋名称</th>
                     <th>楼层名称</th>
                     <th>房间号</th>
-                    <th>年级</th>
-                    <th>宿舍得分</th>
-                    <th>检查日期</th>
-                    <th>备注内容</th>
+                    <th>进入时间</th>
+                    <th>离开时间</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php if(is_array($list['data']) || $list['data'] instanceof \think\Collection || $list['data'] instanceof \think\Paginator): $i = 0; $__LIST__ = $list['data'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?>
                 <tr>
                     <td><?php echo $val['id']; ?></td>
+                    <td style="text-align: left"><?php echo $val['name']; ?></td>
+                    <td><?php echo $sex[$val['sex']]; ?></td>
                     <td><?php echo $val['campus']['cp_name']; ?></td>
+                    <td><?php echo $val['interviewed_relation']; ?></td>
+                    <td><?php echo $val['interviewed']; ?></td>
                     <td><?php echo $val['build']['build_name']; ?></td>
                     <td><?php echo $val['floor']['floor_name']; ?></td>
                     <td><?php echo $val['dormitory']['room_num']; ?></td>
-                    <td><?php echo $val['grade']['gd_name']; ?></td>
-                    <td><?php echo $val['score']; ?></td>
-                    <td><?php if($val['exam_date']): ?><?php echo date('Y-m-d',$val['exam_date']); else: ?>--<?php endif; ?></td>
-                    <td><?php echo $val['remark']; ?></td>
+                    <td><?php echo date('y-m-d H:i',$val['into_date']); ?></td>
+                    <td><?php echo date('y-m-d H:i',$val['out_date']); ?></td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
                 </tbody>
@@ -245,6 +270,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 </div>
@@ -277,14 +303,20 @@
 <script src='/static/js/main.js'></script>
 
 <script>
-
     layui.use('laydate', function(){
         var laydate = layui.laydate;
 
         laydate.render({
-            elem: '#addForm input[name="exam_date"]',
-            format: 'yyyy-MM-dd'
+            elem: '#addForm input[name="into_date"]',
+            type:'datetime',
+            format: 'yyyy-MM-dd HH:mm'
         });
+        laydate.render({
+            elem: '#addForm input[name="out_date"]',
+            type:'datetime',
+            format: 'yyyy-MM-dd HH:mm'
+        });
+
     });
 
     /* 校区选择 */
@@ -366,6 +398,94 @@
             $('#addForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
         }
     });
+
+
+    /* 保存操作 */
+    $(document).on('click','.js-save',function(){
+
+
+        var name = $('#addForm input[name="name"]').val();
+        if ( name == '' )
+        {
+            layer.msg('请填写被访人姓名！', {icon: 2});
+            return;
+        }
+
+        var interviewed_relation = $('#addForm input[name="interviewed_relation"]').val();
+        if ( interviewed_relation == '' )
+        {
+            layer.msg('请填写与被访人关系！', {icon: 2});
+            return;
+        }
+
+        var sex = $('#addForm select[name="sex"]').val();
+        if ( sex == '' )
+        {
+            layer.msg('请填选择性别！', {icon: 2});
+            return;
+        }
+
+        var idcard = $('#addForm input[name="idcard"]').val();
+        if ( idcard == '' )
+        {
+            layer.msg('请填写身份证！', {icon: 2});
+            return;
+        }
+
+        var dormitory_id = $('#addForm select[name="dormitory_id"]').val();
+        if ( !dormitory_id )
+        {
+            layer.msg('请选择房号！', {icon: 2});
+            return;
+        }
+
+        var interviewed = $('#addForm input[name="interviewed"]').val();
+        if ( interviewed == '' )
+        {
+            layer.msg('请填写被访人姓名！', {icon: 2});
+            return;
+        }
+
+        var into_date = $('#addForm input[name="into_date"]').val();
+        if ( into_date == '' )
+        {
+            layer.msg('请填写进入时间！', {icon: 2});
+            return;
+        }
+
+        var out_date = $('#addForm input[name="out_date"]').val();
+        if ( out_date == '' )
+        {
+            layer.msg('请填写离开时间！', {icon: 2});
+            return;
+        }
+
+        var data = $("#addForm").serializeArray();
+        var obj = $(this);
+        if(data){
+
+            if ( obj.attr("data-disable") != 'true')
+            {
+                return;
+            }
+            obj.attr("data-disable",'false');
+
+            $.post("<?php echo url('visiter/saveVisiter'); ?>",data,function(res){
+                if(res.status == 1)
+                {
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout('location.reload()',3000);
+                }
+                else
+                {
+                    obj.attr("data-disable",'true');
+                    layer.msg(res.msg, {icon: 2});
+                }
+            },'json');
+        }
+    });
+
+
 </script>
 </body>
 </html>

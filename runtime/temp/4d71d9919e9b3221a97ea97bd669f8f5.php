@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:41:"../application/index/tpl/dmbuild\add.html";i:1548319204;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1548311275;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:41:"../application/index/tpl/campus\edit.html";i:1545127130;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +55,7 @@
             <!--</li>-->
             <li  style='' class="layui-nav-item">
                 <span class='icon icon-xiaoqu'></span>
-                <a  class="c-link" data-url="<?php echo url('campus/index'); ?>" href="<?php echo url('campus/index'); ?>">校区查看</a>
+                <a  class="c-link" data-url="<?php echo url('campus/index'); ?>" href="<?php echo url('campus/index'); ?>">校区管理</a>
             </li>
             <li style='' class="layui-nav-item">
                 <span class='icon icon-loudong'></span>
@@ -106,10 +106,7 @@
     </div>
 </div>
 
-<style>
-#class_import_box{display:none;}
-</style>
-<div class="layui-body">
+  <div class="layui-body">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;">
         <div class='route-box'>
@@ -117,90 +114,75 @@
             <span class='title'>当前位置：</span>
             <span>首页</span>
             <span>></span>
-            <span><a href="">楼栋管理</a></span>
+            <span><a href="">校区管理</a></span>
         </div>
         <div class='search-box'>
-            <!-- <div class="ipt-box">
-                <form  action="<?php echo url('Dmbuild/edit'); ?>" method='post'>
-                    <input placeholder="请输入楼栋名称" value="<?php echo $build_name; ?>" name="build_name" class='search-ipt' type="text">
-                    <span class='icon-search all-search'></span>
-                </form>
-            </div> -->
-
+          <div class="ipt-box">
+              <form  action="<?php echo url('campus/edit'); ?>" method='post'>
+                  <input placeholder="请输入校区名称" value="<?php echo $cp_name; ?>" name="cp_name" class='search-ipt' type="text">
+                  <span class='icon-search all-search'></span>
+              </form>
+          </div>
+          
         </div>
-        <div style='margin-top:20px;' class='clearfix'>
-            <!-- <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
-                <span class='tab-item on'><a  href="<?php echo url('Dmbuild/add'); ?>">楼栋添加</a></span>
-                <span class='tab-item'><a   href="<?php echo url('Dmbuild/edit'); ?>">编辑楼栋</a></span>
+        <div class='nav-tab-box'>
+            <span class='tab-item'><a  href="<?php echo url('campus/index'); ?>">校区查看</a></span>
+            <span class='tab-item on'><a   href="<?php echo url('campus/edit'); ?>">编辑校区</a></span>
+        </div>
+        <form id="form_name" action="" onsubmit="return false">
+            <input type="hidden" name="id">
+            <div style='margin-top:20px;' class='ipt-main-box'>
+                <div class="ipt-box">
+                  <label for="">校区名称：</label>
+                  <input type="text" class='ipt ipt-s' name="cp_name">
+                </div>
+                <div class="ipt-box">
+                  <label for="" style="width:85px">校区联系人：</label>
+                  <input type="text" class='ipt ipt-s' name="cp_resp">
+                </div>
+                <div class="ipt-box">
+                    <label for="">电话号码：</label>
+                    <input type="text" class='ipt ipt-s' name="cp_tel">
+                  </div>
             </div>
-            <div class='p-r'>
-                <form id="search_from" action="<?php echo url('Dmbuild/edit'); ?>" method='post'>
-                    <select class='ipt-xs' name="campus_id">
-                        <option value="">请选择</option>
-                        <?php if(is_array($campus) || $campus instanceof \think\Collection || $campus instanceof \think\Paginator): $i = 0; $__LIST__ = $campus;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?>
-                        <option value="<?php echo $val['cp_id']; ?>" <?php if($val['cp_id'] == $campus_id): ?>selected<?php endif; ?>><?php echo $val['cp_name']; ?></option>
-                        <?php endforeach; endif; else: echo "" ;endif; ?>
-                    </select>
-                    <select style='margin:0 10px;' class='ipt-xs' name="id">
-                        <option value="">请选择</option>
-                        <?php if(!empty($id)): if(is_array($build) || $build instanceof \think\Collection || $build instanceof \think\Paginator): $i = 0; $__LIST__ = $build;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?>
-                        <option value="<?php echo $val['id']; ?>" <?php if($val['id'] ==$id): ?>selected<?php endif; ?>><?php echo $val['build_name']; ?></option>
-                        <?php endforeach; endif; else: echo "" ;endif; endif; ?>
-                    </select>
-                    <button class="btn btn-info" type="submit">搜索</button>
-                </form>
-            </div> -->
-        </div>
-        <div style='' class='ipt-main-box'>
-            <form id="form_name" action="" onsubmit="return false">
-                <input type="hidden" name="id">
-                <div class="ipt-box">
-                    <label for="">校区选择：</label>
-                    <select style='margin:0 10px;' class='ipt-xs' name="campus_id">
-                        <option value="">请选择</option>
-                        <?php if(is_array($campus) || $campus instanceof \think\Collection || $campus instanceof \think\Paginator): $i = 0; $__LIST__ = $campus;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?>
-                        <option value="<?php echo $val['cp_id']; ?>"><?php echo $val['cp_name']; ?></option>
-                        <?php endforeach; endif; else: echo "" ;endif; ?>
-                    </select>
+            <div style='' class='ipt-main-box'>
+                <div style='width:600px' class="ipt-box">
+                  <label for="">校区地址：</label>
+                  <input style='width:420px;' type="text" class='ipt' name="cp_addr">
+                  <button style='margin-left:10px;' class='btn btn-info save'>修改</button>
                 </div>
-                <div class="ipt-box">
-                    <label for="">楼栋名称：</label>
-                    <input type="text" class='ipt ipt-xs' name="build_name">
-                </div>
-                <div class="ipt-box">
-                    <label for="">备注：</label>
-                    <input type="text" class='ipt ipt-xs' name="dm_info">
-                </div>
-                <button class='btn btn-info save'>添加</button>
-                <button class="btn btn-info inp">一键导入</button>
-            </form>
-        </div>
-
+            </div>
+        </form>
         <div class='c-table-box'>
             <table class="layui-table">
                 <colgroup>
                     <col width="15%">
                     <col width="30%">
-                    <col width="30%">
-                    <col width="25%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
                 </colgroup>
                 <thead>
-                <tr>
-                    <th>序号</th>
+                    <tr>
                     <th>校区名称</th>
-                    <th>楼栋名称</th>
-                    <th>备注</th>
-                </tr>
+                    <th>校区地址</th>
+                    <th>校区联系人</th>
+                    <th>电话号码</th>
+                    <th>操作</th>
+                    </tr> 
                 </thead>
                 <tbody>
-                <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $k = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($k % 2 );++$k;?>
-                <tr>
-                    <td><?php echo $k; ?></td>
-                    <td><?php echo $val['campus']['cp_name']; ?></td>
-                    <td><?php echo $val['build_name']; ?></td>
-                    <td><?php echo $val['dm_info']; ?></td>
-                </tr>
-                <?php endforeach; endif; else: echo "" ;endif; ?>
+                <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?>
+                    <tr>
+                        <td><?php echo $val['cp_name']; ?></td>
+                        <td><?php echo $val['cp_addr']; ?></td>
+                        <td><?php echo $val['cp_resp']; ?></td>
+                        <td><?php echo $val['cp_tel']; ?></td>
+                        <td class='opt-td'>
+                          <a href="javascript:void(0)" data-id="<?php echo $val['cp_id']; ?>" class="edit">编辑</a>
+                        </td>
+                    </tr>
+                   <?php endforeach; endif; else: echo "" ;endif; ?>
                 </tbody>
             </table>
         </div>
@@ -217,26 +199,7 @@
         </div>
     </div>
 
-</div>
-<script type="text" id='class_import_box'>
-    <div class='class-import-box-layer c-layer-padding'>
-        <p style='padding:25px 10px;'>
-            <span>下载导入模板：</span>
-            <a href="">导入模板.xlsx</a>
-        </p>
-        <div style='padding:5px 10px;'>
-            <label for="">导入文件：</label>
-            <input type="text" style='display:inline-block;width:200px;height:30px;' name="title" required  lay-verify="required" placeholder="请选择文件" autocomplete="off" class="layui-input">
-            <button type="button"  style='position:relative;top:-2px;border:1px solid #e6e6e6;background:#fff;color:#666' class="layui-btn" id="test1">
-                预览......
-            </button>
-        </div>
-        <div style='text-align:center;margin-top:15px;'>
-            <button class='layui-btn layui-btn-info'>导入</button>
-        </div>
-    </div>
-</script>
-    
+  </div>
 </div>
 <script src='/static/js/jquery-3.2.1.min.js'></script>
 <script src="/static/js/layui/layui.all.js"></script>
@@ -267,52 +230,36 @@
 <script src='/static/js/main.js'></script>
 
 <script>
-    $('.inp').click(function(){
-        layer.open({
-                type: 1,
-                title: '导入',
-                closeBtn: 1,
-                area:['790px','350px'],
-                shadeClose: false,
-                scrollbar:true,
-                content: $('#class_import_box')
-            });
-    });
-    $(document).on('change','#search_from select[name="campus_id"]',function(){
-        var campus_id = $(this).val();
-        if(campus_id){
-            $.post("<?php echo url('tools/getbuild'); ?>",{campus_id:campus_id},function(res){
-                if(res.status == 1){
-                    var html = '';
-                    $.each(res.data, function(k, v) {
-                        html+= '<option value="'+ v.id+'">'+ v.build_name+'</option>';
-                    });
-                    if(html){
-                        $('#search_from select[name="id"]').html(html);
-                    }
-                }
+    $(document).on('click','.edit',function(){
+        var id = $(this).attr('data-id');
+
+        if(id){
+            $.post("<?php echo url('campus/getInfo'); ?>",{id:id},function(res){
+              if(res.status == 1){
+                    $('#form_name').find('input[name="id"]').val(res.data.cp_id);
+                    $('#form_name').find('input[name="cp_name"]').val(res.data.cp_name);
+                    $('#form_name').find('input[name="cp_resp"]').val(res.data.cp_resp);
+                    $('#form_name').find('input[name="cp_tel"]').val(res.data.cp_tel);
+                    $('#form_name').find('input[name="cp_addr"]').val(res.data.cp_addr);
+              }
             },'json');
-        }else{
-            $('#search_from select[name="id"]').html('<option value="">请选择</option>');
         }
     });
 
     $(document).on('click','.save',function(){
-        var data = $("#form_name").serializeArray();
+       var data = $("#form_name").serializeArray();
 
         if(data){
-            $.post("<?php echo url('Dmbuild/insert'); ?>",data,function(res){
+            $.post("<?php echo url('campus/update'); ?>",data,function(res){
                 if(res.status == 1){
                     layer.msg(res.msg, {icon: 1});
-                    setTimeout('location.reload()',500);
+                    setTimeout(location.reload(),5000);
                 }else{
                     layer.msg(res.msg, {icon: 2});
-                    setTimeout('location.reload()',500);
                 }
             },'json');
         }
     });
-
 
 </script>
 </body>

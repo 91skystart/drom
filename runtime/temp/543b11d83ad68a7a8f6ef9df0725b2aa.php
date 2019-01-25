@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:42:"../application/index/tpl/campus\index.html";i:1548311237;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1548311275;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:45:"../application/index/tpl/bed_manage\room.html";i:1545128648;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +55,7 @@
             <!--</li>-->
             <li  style='' class="layui-nav-item">
                 <span class='icon icon-xiaoqu'></span>
-                <a  class="c-link" data-url="<?php echo url('campus/index'); ?>" href="<?php echo url('campus/index'); ?>">校区查看</a>
+                <a  class="c-link" data-url="<?php echo url('campus/index'); ?>" href="<?php echo url('campus/index'); ?>">校区管理</a>
             </li>
             <li style='' class="layui-nav-item">
                 <span class='icon icon-loudong'></span>
@@ -114,59 +114,105 @@
             <span class='title'>当前位置：</span>
             <span>首页</span>
             <span>></span>
-            <span><a href="">校区查看</a></span>
+            <span><a href="javascript:void(0)" class="menu-nav">人员管理</a></span>
+            <span>></span>
+            <span><a href="javascript:void(0)">学生铺位分配</a></span>
         </div>
         <div class='search-box'>
-          <div class="ipt-box">
-              <form  action="<?php echo url('campus/index'); ?>" method='post'>
-                  <input placeholder="请输入校区名称" value="<?php echo $cp_name; ?>" name="cp_name" class='search-ipt' type="text">
-                  <span class='icon-search all-search'></span>
-              </form>
-          </div>
+            <div class="ipt-box">
+                <form  action="<?php echo url('bed_manage/room',['id' => $dormitoryInfo['id']]); ?>" method='post'>
 
+                    <input placeholder="请输入学生姓名"  name="student_name" value="<?php echo $studentName; ?>" class='search-ipt' type="text">
+                    <span class='icon-search all-search'></span>
+                </form>
+            </div>
         </div>
-        <div style='margin-bottom:20px;' class='nav-tab-box'>
-            <!-- <span class='tab-item on'><a  href="<?php echo url('campus/index'); ?>">校区查看</a></span> -->
-            <!-- <span class='tab-item'><a   href="<?php echo url('campus/edit'); ?>">编辑校区</a></span> -->
-        </div>
-        <div class='c-table-box'>
-            <table class="layui-table">
+
+        <div class='c-table-box' style="border-top:0px;">
+            <table class="layui-table" style="width:15%;float:left;">
                 <colgroup>
+                    <col width="6%">
+                    <col width="10%">
+                    <col width="8%">
+                    <col width="8%">
+                    <col width='8%'>
                     <col width="10%">
                     <col width="10%">
-                    <col width="10%">
-                    <col width="10%">
+                    <col width="7%">
+                    <col width="8%">
                 </colgroup>
                 <thead>
-                    <tr>
-                        <th>校区名称</th>
-                        <th>校区地址</th>
-                        <th>校区联系人</th>
-                        <th>电话号码</th>
-                    </tr>
+                <tr>
+                    <th><?php echo $dormitoryInfo['build']['build_name']; ?> <?php echo $dormitoryInfo['room_num']; ?></th>
+                </tr>
+
                 </thead>
                 <tbody>
+                <tr>
+                    <td style="border: 0px;">
+                        <p style="line-height: 26px;">
+                            所在层数:<?php echo $dormitoryInfo['floor']['floor_name']; ?> <br />
+                            房间号: <?php echo $dormitoryInfo['room_num']; ?><br />
+                            总床位数: <?php echo $dormitoryInfo['several']; ?><br />
+                            剩余床位:<?php echo $dormitoryInfo['several'] - $dormitoryInfo['check_in_count']; ?>
+                        </p>
+                        <br />
+                        <a class="btn btn-info" href="<?php echo url('bed_manage/allot',['id'=> $dormitoryInfo['id']]); ?>">分配学生</a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+
+            <table class="layui-table" style="width:80%;float:right">
+                <colgroup>
+                    <col width="6%">
+                    <col width="10%">
+                    <col width="8%">
+                    <col width="8%">
+                    <col width='8%'>
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="7%">
+                    <col width="8%">
+                    <col width='6%'>
+                    <col width="6%">
+                    <col width="6%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th colspan="9">入住学生</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr>
+                    <td>序号</td>
+                    <td>学号</td>
+                    <td>姓名</td>
+                    <td>性别</td>
+                    <td>年级</td>
+                    <td>班级</td>
+                    <td>房间号</td>
+                    <td>身份证</td>
+                    <td>电话</td>
+                </tr>
                 <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?>
-                    <tr>
-                        <td><?php echo $val['cp_name']; ?></td>
-                        <td><?php echo $val['cp_addr']; ?></td>
-                        <td><?php echo $val['cp_resp']; ?></td>
-                        <td><?php echo $val['cp_tel']; ?></td>
-                    </tr>
+                <tr>
+                    <td><?php echo $val['id']; ?></td>
+                    <td><?php echo $val['student_num']; ?></td>
+                    <td><?php echo $val['name']; ?></td>
+                    <td><?php echo $val['sex']==1?'男':'女'; ?></td>
+                    <td><?php echo $val['grade']['gd_name']; ?></td>
+                    <td><?php echo $val['bclass']['cl_name']; ?></td>
+                    <td><?php echo $val['dormitory']['room_num']; ?></td>
+                    <td><?php echo $val['idcard']; ?></td>
+                    <td><?php echo $val['phone']; ?></td>
+                </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
                 </tbody>
             </table>
-        </div>
-        <div class='page-box clearfix'>
-            <div style='font-size:16px;color:#333' class='p-l'>
-                <span>共</span>
-                <span style='margin:0 5px'><?php echo $count; ?></span>
-                <span>条记录</span>
-            </div>
-            <div class='p-r'>
-                <!-- 分页 -->
-                <div id="c_page"><?php echo $page; ?></div>
-            </div>
         </div>
     </div>
 

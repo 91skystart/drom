@@ -1,0 +1,111 @@
+{include file='index/header' /}
+{include file='index/menu' /}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <div class='route-box'>
+            <span class='icon icon-position'></span>
+            <span class='title'>当前位置：</span>
+            <span>首页</span>
+            <span>></span>
+            <span><a href="javascript:void(0)" class="menu-nav">人员管理</a></span>
+            <span>></span>
+            <span><a href="javascript:void(0)">员工管理</a></span>
+        </div>
+        <div style='margin-top:20px;' class='clearfix'>
+            <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
+                <span class='tab-item'><a  href="{:url('staff/index')}">人员信息</a></span>
+                <span class='tab-item'><a  href="{:url('staff/add')}">添加人员</a></span>
+                <span class='tab-item on'><a  href="{:url('staff/importStaff')}">一键导入</a></span>
+            </div>
+        </div>
+        <div class='ipt-main-box'>
+            <div class="layui-upload upload-file-info">
+                <span>选择文件:</span>
+                <button type="button" class="layui-btn layui-btn-normal select-file" name="upload_staff" id="upload_staff" >选择文件</button>
+                <button type="button" class="layui-btn upload-file-button" id="js_import_staff" data-disable="true">上传文件</button>
+            </div>
+        </div>
+
+        <div class="c-table-box upload-file-des">
+            <p class="upload-file-des-title">上传帮助</p>
+            <p>1.为正确上传数据，用户可以先下载<a href="{:url('staff/example',['id' => 1])}" target="_blank">“员工信息导入模板” </a>用户也可以下载带实例的数据的实例文件<a href="{:url('staff/example',['id' => 2])}" target="_blank">“员工信息数据实例文件”</a>作为参考，请务必删除文件内的测试数据。</p>
+            <p>2.文件的第一列是字段表示行，无需删除。</p>
+            <p>3.从第二列开始可以录入所需的数据，每行对应一条数据。</p>
+            <p>4.为保证系统数据安全，系统对所有上传数据有严格的有效要求，对应好每一个字段。</p>
+            <p>5.不要修改模板文件的第一行的名称，否则影响数据上传。</p>
+        </div>
+
+        <div class='c-table-box upload-file-des' style="display: none;">
+            <p class="upload-file-des-title" >导入数据信息</p>
+            <p class="import-success-tip"><span class="upload-file-des-title-left">成功导入</span>   成功导入数据<span id="successTotal"></span>条<p>
+            <p class="import-failure-tip"><span class="upload-file-des-title-left">错误数据</span>   <span id="failureTotal"></span>条</p>
+            <table class="layui-table import-failure-tip" id="import-failure-list" style="display: none;">
+                <colgroup>
+                    <col width="6%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="70%">
+                </colgroup>
+                <thead></thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{include file='index/footer' /}
+<script>
+    layui.use('upload', function(){
+        var $ = layui.jquery
+            ,upload = layui.upload;
+
+        //选完文件后不自动上传
+        upload.render({
+            elem: '#upload_staff'
+            ,url: "{:url('staff/doImportStaff')}" //上传接口
+            ,exts: 'xls|jpg'
+            ,auto: false
+            //,multiple: true
+            ,bindAction: '#js_import_staff'
+            ,before:function(obj){
+                //console.log(obj)
+            }
+            ,done: function(res){
+
+                if (res.status == 1)
+                {
+                    var data = res.data;
+                    $("#successTotal").html(data.successTotal);
+                    $("#failureTotal").html(data.failureTotal);
+
+                    if ( data.failureTotal > 0 )
+                    {
+                        var resHtml = '';
+                        $.each(data.list, function(k, v) {
+                            var number = parseInt(k) + 1;
+                            resHtml += '<tr><td>' +number+'</td><td>' + v.ad_num+ '</td><td colspan="2" style="text-align: left">'+ v.ad_sname +'</td></tr>';
+                        });
+                        $("#import-failure-list").find("tbody").html(resHtml);
+
+                        $("#import-failure-list").show();
+                    }
+
+                    $(".upload-file-des").show();
+                }
+                else
+                {
+                    $("#import-failure-list").hide();
+                    $(".upload-file-des").hide();
+                    layer.msg(res.msg, {icon: 2});
+                }
+
+            }
+        });
+
+    });
+
+</script>
+</body>
+</html>

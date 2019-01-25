@@ -1,0 +1,116 @@
+{include file='index/header' /}
+{include file='index/menu' /}
+<div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <div class='route-box'>
+            <span class='icon icon-position'></span>
+            <span class='title'>当前位置：</span>
+            <span>首页</span>
+            <span>></span>
+            <span><a href="javascript:void(0)" class="menu-nav">人员管理</a></span>
+            <span>></span>
+            <span><a href="javascript:void(0)">学生铺位分配</a></span>
+        </div>
+        <div class='search-box'>
+            <div class="ipt-box">
+                <form  action="{:url('bed_manage/room',['id' => $dormitoryInfo['id']])}" method='post'>
+
+                    <input placeholder="请输入学生姓名"  name="student_name" value="{$studentName}" class='search-ipt' type="text">
+                    <span class='icon-search all-search'></span>
+                </form>
+            </div>
+        </div>
+
+        <div class='c-table-box' style="border-top:0px;">
+            <table class="layui-table" style="width:15%;float:left;">
+                <colgroup>
+                    <col width="6%">
+                    <col width="10%">
+                    <col width="8%">
+                    <col width="8%">
+                    <col width='8%'>
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="7%">
+                    <col width="8%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>{$dormitoryInfo['build']['build_name']} {$dormitoryInfo.room_num}</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr>
+                    <td style="border: 0px;">
+                        <p style="line-height: 26px;">
+                            所在层数:{$dormitoryInfo['floor']['floor_name']} <br />
+                            房间号: {$dormitoryInfo.room_num}<br />
+                            总床位数: {$dormitoryInfo.several}<br />
+                            剩余床位:{$dormitoryInfo.several - $dormitoryInfo.check_in_count}
+                        </p>
+                        <br />
+                        <a class="btn btn-info" href="{:url('bed_manage/allot',['id'=> $dormitoryInfo['id']])}">分配学生</a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+
+            <table class="layui-table" style="width:80%;float:right">
+                <colgroup>
+                    <col width="6%">
+                    <col width="10%">
+                    <col width="8%">
+                    <col width="8%">
+                    <col width='8%'>
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="7%">
+                    <col width="8%">
+                    <col width='6%'>
+                    <col width="6%">
+                    <col width="6%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th colspan="9">入住学生</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr>
+                    <td>序号</td>
+                    <td>学号</td>
+                    <td>姓名</td>
+                    <td>性别</td>
+                    <td>年级</td>
+                    <td>班级</td>
+                    <td>房间号</td>
+                    <td>身份证</td>
+                    <td>电话</td>
+                </tr>
+                {volist name="list" id="val"}
+                <tr>
+                    <td>{$val.id}</td>
+                    <td>{$val.student_num}</td>
+                    <td>{$val.name}</td>
+                    <td>{$val.sex==1?'男':'女'}</td>
+                    <td>{$val.grade.gd_name}</td>
+                    <td>{$val.bclass.cl_name}</td>
+                    <td>{$val.dormitory.room_num}</td>
+                    <td>{$val.idcard}</td>
+                    <td>{$val.phone}</td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{include file='index/footer' /}
+</body>
+</html>
