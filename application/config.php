@@ -8,7 +8,8 @@
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
-require substr($_SERVER['DOCUMENT_ROOT'], 0, 11).'config/config.php';
+// require substr($_SERVER['DOCUMENT_ROOT'], 0, 11).'config/config.php';
+require 'C:\charles\PHPTutorial\WWW\config\config.php';
 $dormConfig = [
     // +----------------------------------------------------------------------
     // | 应用设置
