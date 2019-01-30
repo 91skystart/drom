@@ -194,7 +194,7 @@ class Changedormitory extends Common
                 'before_build_id' => $stayInfo['build_id'],
                 'before_floor_id' => $stayInfo['floor_id'],
                 'before_dormitory_id' => $stayInfo['dormitory_id'],
-                'adjust_date' => $postData['adjust_date'] != '' ? strtotime($postData['adjust_date']) :time(),
+                'adjust_date' => $postData['adjust_date'] != '' ? strtotime($postData['adjust_date']) :null,
             ];
 
             $res = $this->model->where(['id'=> $stayInfo['id']])->update($updateData);

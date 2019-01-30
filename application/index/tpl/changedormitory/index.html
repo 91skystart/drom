@@ -40,24 +40,24 @@
                 </div>
                 <div class="ipt-box">
                     <label for="">姓名：</label>
-                    <input type="text" class='ipt ipt-xs' name="name">
+                    <input type="text" class='ipt ipt-xs' name="name" disabled="disabled">
                 </div>
                 <div class="ipt-box">
                     <label for="">性别：</label>
-                    <input type="text" class='ipt ipt-xs' name="sex">
+                    <input type="text" class='ipt ipt-xs' name="sex" disabled="disabled">
                 </div>
                 <div class="ipt-box">
                     <label for="">楼栋名称：</label>
-                    <input type="text" class='ipt ipt-xs' name="build_name">
+                    <input type="text" class='ipt ipt-xs' name="build_name" disabled="disabled">
                 </div>
 
                 <div class="ipt-box">
                     <label for="">层数：</label>
-                    <input type="text" class='ipt ipt-xs' name="floor_name">
+                    <input type="text" class='ipt ipt-xs' name="floor_name" disabled="disabled">
                 </div>
                 <div class="ipt-box">
                     <label for="">房号：</label>
-                    <input type="text" class='ipt ipt-xs' name="room_name">
+                    <input type="text" class='ipt ipt-xs' name="room_name" disabled="disabled">
                 </div>
                 <div class="ipt-box">
                     <label for="">调房日期：</label>
@@ -129,7 +129,7 @@
                     <td>{$val.before_build.build_name}</td>
                     <td>{$val.before_floor.floor_name}</td>
                     <td>{$val.before_dormitory.room_num}</td>
-                    <td>{$val.adjust_date|date="y-m-d",###}</td>
+                    <td>{notempty name="$val.adjust_date"}{$val.adjust_date|date="y-m-d",###}{/notempty}</td>
                     <td class='opt-td'>
                         <a href="javascript:void(0)" data-id="{$val.student_num}" class="js-edit">编辑</a>
                     </td>
@@ -174,11 +174,12 @@
 
     $(document).on('blur','#form_name input[name="student_num"]',function(){
         var studentNum = $(this).val();
-        if( studentNum )
-        {
-            // 获取入住学生信息
-            getStudent(studentNum)
-        }
+        // if( studentNum )
+        // {
+        //     // 获取入住学生信息
+        //     getStudent(studentNum)
+        // }
+        getStudent(studentNum)
     });
 
 
