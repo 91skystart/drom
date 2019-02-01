@@ -37,11 +37,11 @@ class Common extends Controller
         }
 
         // 检查权限
-        if ( !$this->_checkAuth(Cookie::get('token'),Cookie::get('rs_id')) )
-        {
-            //  没有权限
-            $this->error('您没有该菜单的操作权限。');
-        }
+        // if ( !$this->_checkAuth(Cookie::get('token'),Cookie::get('rs_id')) )
+        // {
+        //     //  没有权限
+        //     $this->error('您没有该菜单的操作权限。');
+        // }
 
 
         if($this->model == NULL)

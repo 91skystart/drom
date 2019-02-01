@@ -18,7 +18,7 @@ class DmHitch extends Base
         'info|内容' => 'max:500',
         'phone|电话' => 'max:500',
         'register_date|登记日期' => 'dateFormat:Y-m-d',
-        'handle_date|处理日期' => 'dateFormat:Y-m-d',
+        // 'handle_date|处理日期' => 'dateFormat:Y-m-d',
     ];
 
     public function sceneAdd()

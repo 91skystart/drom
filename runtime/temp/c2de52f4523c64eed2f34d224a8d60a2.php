@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:51:"../application/index/tpl/changedormitory\index.html";i:1548842130;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\header.html";i:1548765601;s:69:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\menu.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\footer.html";i:1548765601;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:51:"../application/index/tpl/changedormitory\index.html";i:1548900714;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\header.html";i:1548765601;s:69:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\menu.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\footer.html";i:1548765601;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -171,7 +171,7 @@
                 <span class='tab-item on'><a href="<?php echo url('changedormitory/index'); ?>">学生调往空宿舍</a></span>
                 <span class='tab-item'><a href="<?php echo url('changedormitory/student'); ?>">学生对调</a></span>
                 <span class='tab-item'><a href="<?php echo url('changedormitory/emptyRoom'); ?>">整间宿舍调往空宿舍</a></span>
-                <span class='tab-item'><a href="<?php echo url('changedormitory/room'); ?>">两件宿舍对调</a></span>
+                <span class='tab-item'><a href="<?php echo url('changedormitory/room'); ?>">两间宿舍对调</a></span>
             </div>
         </div>
         <form id="form_name" action="" onsubmit="return false">
@@ -245,7 +245,7 @@
                     <col width="6%">
                     <col width="6%">
                     <col width='6%'>
-                    <col width="6%">
+                    <col width="8%">
                 </colgroup>
                 <thead>
                 <tr>
@@ -277,6 +277,7 @@
                     <td><?php if(!(empty($val['adjust_date']) || (($val['adjust_date'] instanceof \think\Collection || $val['adjust_date'] instanceof \think\Paginator ) && $val['adjust_date']->isEmpty()))): ?><?php echo date("y-m-d",$val['adjust_date']); endif; ?></td>
                     <td class='opt-td'>
                         <a href="javascript:void(0)" data-id="<?php echo $val['student_num']; ?>" class="js-edit">编辑</a>
+                        <a href="javascript:void(0)" data-id="<?php echo $val['id']; ?>" class="js-delete">删除</a>
                     </td>
                 </tr>
                 </tbody>
@@ -343,6 +344,29 @@
             // 获取入住学生信息
             getStudent(studentNum)
         }
+    });
+
+    $(document).on('click','.js-delete',function(){
+        var id = $(this).attr("data-id");
+        layer.confirm('确定要删除该记录吗？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+
+            $.post("<?php echo url('changedormitory/delStay'); ?>",{id:id},function(res){
+                if(res.status == 1)
+                {
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout('location.reload()',3000);
+                }
+                else
+                {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            },'json');
+
+        }, function(){
+
+        });
     });
 
     $(document).on('blur','#form_name input[name="student_num"]',function(){

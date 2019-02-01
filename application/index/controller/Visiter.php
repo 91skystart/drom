@@ -178,6 +178,30 @@ class Visiter extends Common
                 return json(['status' => 0, 'msg' => '请填写离开时间！']);
             }*/
 
+            if(!is_idcard($saveData['idcard'])){
+                return json(['status' => 0, 'msg' => '身份证号输入错误！']);
+            }
+
+            if ( $saveData['into_date'] == '' )
+            {
+                return json(['status' => 0, 'msg' => '请填写进入时间！']);
+            }
+
+            if ( $saveData['out_date'] == '' )
+            {
+                return json(['status' => 0, 'msg' => '请填写离开时间！']);
+            }
+
+            $into_date = strtotime($saveData['into_date']);
+            $out_date  = strtotime($saveData['out_date']);
+            if($into_date>=$out_date){
+                return ['status'=>0,'msg'=>'离开时间不得小于进入时间'];
+            }
+            if($out_date - $into_date > 86400){
+                return ['status'=>0,'msg'=>'最长逗留时间不能超过1天'];
+            }
+
+
             /* 规则验证 */
             if($this->vd != '')
             {
@@ -235,6 +259,28 @@ class Visiter extends Common
         $page = $list->render();
 
         return [$list->toArray(),$page];
+    }
+
+    /**
+     * @description 获取被访问人信息
+     * @author zwd
+     */
+    public function getdormitory(){
+        $data = input('');
+        if(!empty($data['campus_id'])){
+            $map['campus_id'] = $data['campus_id'];
+        }
+        if(!empty($data['build_id'])){
+            $map['build_id'] = $data['build_id'];
+        }
+        if(!empty($data['floor_id'])){
+            $map['floor_id'] = $data['floor_id'];
+        }
+        if(!empty($data['dormitory_id'])){
+            $map['dormitory_id'] = $data['dormitory_id'];
+        }
+        $data = model('dm_stay')->where($map)->field('id,name')->select();
+        return ['status'=>1,'data'=>$data];
     }
 
 

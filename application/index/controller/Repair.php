@@ -309,6 +309,13 @@ class Repair extends Common
             {
                 return json(['status' => 0, 'msg' => '请填写收费员！']);
             }*/
+            if(!is_numeric($saveData['charge'])){
+                return json(['status' => 0, 'msg' => '收费字段为数字！']);
+            }
+
+            if(!is_mobile($saveData['phone'])){
+                return json(['status' => 0, 'msg' => '手机号验证错误！']);
+            }
 
             if($this->vd != '')
             {
@@ -398,6 +405,9 @@ class Repair extends Common
             ->where($where)
             ->order($this->order)
             ->paginate($this->pagesize);
+        foreach($list as &$value){
+            $value['info'] = strlen($value['info']) > 15 ? substr($value['info'],0,15)."..." : $value['info'];
+        }
         $page = $list->render();
 
         return [$list->toArray(),$page];

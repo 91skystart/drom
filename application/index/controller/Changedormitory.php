@@ -52,6 +52,20 @@ class Changedormitory extends Common
     }
 
     /**
+     * @description 推宿舍
+     * @author zwd
+     */
+    public function delStay(){
+        $id = input('id');
+        $result = $this->model->where(['id'=>$id])->delete();
+        if($result){
+            return ['status'=>1,'msg'=>'删除成功'];
+        }else{
+            return ['status'=>0,'msg'=>'删除失败'];
+        }
+    }
+
+    /**
      * @description 根据条件获取
      * @author Lang
      * @param array $where

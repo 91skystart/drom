@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:43:"../application/index/tpl/visiter\outer.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\header.html";i:1548765601;s:69:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\menu.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\footer.html";i:1548765601;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:43:"../application/index/tpl/visiter\outer.html";i:1548932854;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\header.html";i:1548765601;s:69:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\menu.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\footer.html";i:1548765601;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -222,14 +222,16 @@
                 </div>
                 <div class="ipt-box">
                     <label for="">房号：</label>
-                    <select class='ipt-xs select-dormitory' name="dormitory_id">
+                    <select id="dormitory_id" class='ipt-xs select-dormitory' name="dormitory_id">
                         <option value="">请选择</option>
                     </select>
                 </div>
 
                 <div class="ipt-box">
                     <label for="">被访人姓名：</label>
-                    <input type="text" class='ipt ipt-xs' name="interviewed">
+                    <select class='ipt-xs' name="interviewed">
+                        <option value="">请选择</option>
+                    </select>
                 </div>
 
                 <div class="ipt-box">
@@ -358,6 +360,24 @@
 
     });
 
+    /* 选择房间号后选择被访问人信息 */
+    $('#dormitory_id').change(function(){
+        var campus_id = $('#addForm select[name="campus_id"]').val();
+        var build_id = $('#addForm select[name="build_id"]').val();
+        var floor_id = $('#addForm select[name="floor_id"]').val();
+        var dormitory_id = $('#addForm select[name="dormitory_id"]').val();
+        $.post("<?php echo url('getdormitory'); ?>",{campus_id:campus_id,build_id:build_id,floor_id:floor_id,dormitory_id:dormitory_id},function(res){
+            if(res.status == 1)
+            {
+                var html = '<option value="">请选择</option>';
+                $.each(res.data, function(k, v) {
+                    html+= '<option value="'+ v.id+'">'+ v.name+'</option>';
+                });
+                $('#addForm select[name="interviewed"]').html(html);
+            }
+        },'json');
+    })
+
     /* 校区选择 */
     $(document).on('change','.select-campus',function(){
 
@@ -446,7 +466,7 @@
         var name = $('#addForm input[name="name"]').val();
         if ( name == '' )
         {
-            layer.msg('请填写被访人姓名！', {icon: 2});
+            layer.msg('请填写来访人姓名！', {icon: 2});
             return;
         }
 
