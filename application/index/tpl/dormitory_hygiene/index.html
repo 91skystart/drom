@@ -134,7 +134,7 @@
                     <td>{$val.grade.gd_name}</td>
                     <td>{$val.score}</td>
                     <td>{if condition="$val.exam_date"}{$val.exam_date|date='Y-m-d',###}{else/}--{/if}</td>
-                    <td>{$val.remark}</td>
+                    <td class="open" style="cursor:pointer" data-value="{$val.remark}">{$val.remarks}</td>
                 </tr>
                 {/volist}
                 </tbody>
@@ -278,6 +278,14 @@
         }
     });
 
+    /* tips显示内容 */
+    $('.open').click(function(){
+        var content = $(this).attr('data-value');
+        layer.open({
+            title: '备注'
+            ,content: content
+        });
+    })
 
     /* 保存操作 */
     $(document).on('click','.js-save',function(){

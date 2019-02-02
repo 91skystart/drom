@@ -117,7 +117,7 @@
                     <col width="7%">
                     <col width="10%">
                     <col width="10%">
-                    <col width="7%">
+                    <col width="9%">
                 </colgroup>
                 <thead>
                 <tr>
@@ -129,7 +129,7 @@
                     <th>楼层名称</th>
                     <th>房间号</th>
                     <th>年级</th>
-                    <th>表扬内容</th>
+                    <th>内容</th>
                     <th>发生日期</th>
                     <th>备注</th>
                 </tr>
@@ -147,7 +147,7 @@
                     <td>{$val.grade.gd_name}</td>
                     <td>{$val.info}</td>
                     <td>{$val.happen_date|date='Y-m-d',###}</td>
-                    <td>{$val.remark}</td>
+                    <td class="open" style="cursor:pointer" data-value="{$val.remark}">{$val.remarks}</td>
                 </tr>
                 {/volist}
                 </tbody>
@@ -174,7 +174,8 @@
 
         laydate.render({
             elem: '#addForm input[name="happen_date"]',
-            format: 'yyyy-MM-dd'
+            format: 'yyyy-MM-dd',
+            max: 0
         });
     });
 
@@ -205,6 +206,15 @@
             $('#addForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
         }
     });
+
+    /* tips显示内容 */
+    $('.open').click(function(){
+        var content = $(this).attr('data-value');
+        layer.open({
+            title: '备注'
+            ,content: content
+        });
+    })
 
 
     /* 楼栋选择 */

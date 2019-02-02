@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:42:"../application/index/tpl/repair\index.html";i:1549019525;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\header.html";i:1548765601;s:69:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\menu.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\footer.html";i:1548765601;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:42:"../application/index/tpl/repair\index.html";i:1549078138;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\header.html";i:1548765601;s:69:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\menu.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\footer.html";i:1548765601;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -286,7 +286,7 @@
                     <td><?php echo $val['floor']['floor_name']; ?></td>
                     <td><?php echo $val['dormitory']['room_num']; ?></td>
                     <td><?php echo $type[$val['type']]; ?></td>
-                    <td><?php echo $val['info']; ?></td>
+                    <td class="open" style="cursor:pointer" data-value="<?php echo $val['info']; ?>"><?php echo $val['infos']; ?></td>
                     <td><?php echo $val['charge']; ?></td>
                     <td><?php echo $val['phone']; ?></td>
                     <td><?php echo date('y-m-d',$val['register_date']); ?></td>
@@ -349,6 +349,15 @@
             format: 'yyyy-MM-dd'
         });
     });
+
+    /* tips显示内容 */
+    $('.open').click(function(){
+        var content = $(this).attr('data-value');
+        layer.open({
+            title: '备注'
+            ,content: content
+        });
+    })
 
     /* 校区选择 */
     $(document).on('change','.select-campus',function(){

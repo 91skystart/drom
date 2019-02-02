@@ -42,6 +42,9 @@ class DormitoryHygiene extends Common
             ->where($where)
             ->order($this->order)
             ->paginate($this->pagesize);
+        foreach($list as &$value){
+            $value['remarks'] = strlen($value['remark']) > 15 ? substr($value['remark'],0,15)."..." : $value['remark'];;
+        }
         $page = $list->render();
 
         $campusList = model("campus")->select();

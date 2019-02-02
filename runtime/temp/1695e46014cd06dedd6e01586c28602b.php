@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:42:"../application/index/tpl/assess\index.html";i:1545356506;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:42:"../application/index/tpl/assess\index.html";i:1549077921;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\header.html";i:1548765601;s:69:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\menu.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\footer.html";i:1548765601;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +7,7 @@
     <title>home</title>
     <link rel="stylesheet" href="/static/js/layui/css/layui.css">
     <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/header.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/c_page.css">
     <!--[if lt IE 9]>
@@ -21,30 +22,68 @@
 </head>
 
 <body class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
+        <div style='' class='row clearfix basic-desktop-container'>
+                <div class='topbar-box default-style-color col-lg-12'>
+                    <div class='menu-btn'>
+                        <span class='icon-menu'></span>
+                            <ul class='menu-child-list hide'>
+                                <?php if(is_array($systemModel) || $systemModel instanceof \think\Collection || $systemModel instanceof \think\Paginator): if( count($systemModel)==0 ) : echo "" ;else: foreach($systemModel as $key=>$vo): ?>
+                                <li><a href="<?php echo $vo['sd_url']; ?>"><?php echo $vo['sd_name']; ?></a></li>
+                                <?php endforeach; endif; else: echo "" ;endif; ?>
+                            </ul>    
+                    </div>
+                    <div class='topbar col-lg-12 clearfix'>
+                        <div style='' class='pull-left'>
+                            <h3 style='margin-left:70px;font-size:24px;color:#f5f5f5'>欢迎来到<?php echo \think\Config::get('sushe_text'); ?></h3>
+                        </div>
+                        <div class='pull-right '>
+                            <div class='user-box'>
+                                <a href="<?php echo \think\Config::get('sso_config.base_url'); ?>/home/index/usermodify" style="color:#fff;">
+                                    <span class='icon-user'></span>
+                                </a>
+                                <a href="<?php echo \think\Config::get('sso_config.base_url'); ?>/admin/index/index" style="color:#fff;">
+                                    <span class='welcome'>欢迎您，<?php echo $loginName; ?></span>
+                                </a>
+                            </div>
+                            <span class='c-line-1'>|</span>
+                            <div class='topbar-btn-list'>
+                                <span class='btn-item icon-email'></span>
+                                <span class='btn-item icon-question'></span>
+                                <span class='btn-item icon-skin'></span>
+                                <a href="<?php echo $logoutUrl; ?>"><span id='login_out'  class='btn-item icon-close t'></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                
+          
+                
+            </div>
+<!-- <div class="layui-layout layui-layout-admin">
     <div class="layui-header c-header">
         <span class='icon-menu'></span>
-        <div class="layui-logo c-logo">宿舍管理系统</div>
+        <div class="layui-logo c-logo">宿舍管理系统</div> -->
         <!-- 头部区域 -->
-        <span class='head-line-1'></span>
+        <!-- <span class='head-line-1'></span>
         <span class='logo-ps'>科迅软件</span>
         <ul class="layui-nav layui-layout-right nav-user">
-            <li  class="layui-nav-item">
-                <a href="javascript:;" class='username'>
+            <li  class="layui-nav-item"> -->
+                <!-- <a href="javascript:;" class='username'> -->
                     <!--<img src="<?php echo $avatarImg!=''?$avatarImg : ''; ?>http://t.cn/RCzsdCq" class="layui-nav-img">-->
-                    您好 , <?php echo $loginName; ?>
-                </a>
+                    <!-- 您好 , <?php echo $loginName; ?> -->
+                <!-- </a> -->
                 <!--<dl class="layui-nav-child top-nav-child">-->
                     <!--<dd><a href="">基本资料</a></dd>-->
                     <!--<dd><a href="">安全设置</a></dd>-->
                 <!--</dl>-->
-            </li>
+            <!-- </li>
             <span class='c-s-line'></span>
             <li class="layui-nav-item layui-nav-item-close">
                 <a class='icon icon-sign-out' href="<?php echo $logoutUrl; ?>"></a>
             </li>
         </ul>
-    </div>
+    </div> -->
 <div class="layui-side layui-bg-gray">
     <div class="layui-side-scroll">
         <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -223,7 +262,7 @@
                     <col width="7%">
                     <col width="10%">
                     <col width="10%">
-                    <col width="7%">
+                    <col width="9%">
                 </colgroup>
                 <thead>
                 <tr>
@@ -235,7 +274,7 @@
                     <th>楼层名称</th>
                     <th>房间号</th>
                     <th>年级</th>
-                    <th>表扬内容</th>
+                    <th>内容</th>
                     <th>发生日期</th>
                     <th>备注</th>
                 </tr>
@@ -253,7 +292,7 @@
                     <td><?php echo $val['grade']['gd_name']; ?></td>
                     <td><?php echo $val['info']; ?></td>
                     <td><?php echo date('Y-m-d',$val['happen_date']); ?></td>
-                    <td><?php echo $val['remark']; ?></td>
+                    <td class="open" style="cursor:pointer" data-value="<?php echo $val['remark']; ?>"><?php echo $val['remarks']; ?></td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
                 </tbody>
@@ -308,7 +347,8 @@
 
         laydate.render({
             elem: '#addForm input[name="happen_date"]',
-            format: 'yyyy-MM-dd'
+            format: 'yyyy-MM-dd',
+            max: 0
         });
     });
 
@@ -339,6 +379,15 @@
             $('#addForm select[name="dormitory_id"]').html('<option value="">请选择</option>');
         }
     });
+
+    /* tips显示内容 */
+    $('.open').click(function(){
+        var content = $(this).attr('data-value');
+        layer.open({
+            title: '备注'
+            ,content: content
+        });
+    })
 
 
     /* 楼栋选择 */

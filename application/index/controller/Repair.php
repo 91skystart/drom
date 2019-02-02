@@ -406,7 +406,7 @@ class Repair extends Common
             ->order($this->order)
             ->paginate($this->pagesize);
         foreach($list as &$value){
-            $value['info'] = strlen($value['info']) > 15 ? substr($value['info'],0,15)."..." : $value['info'];
+            $value['infos'] = strlen($value['info']) > 15 ? substr($value['info'],0,15)."..." : $value['info'];
         }
         $page = $list->render();
 

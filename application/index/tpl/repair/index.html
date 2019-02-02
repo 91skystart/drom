@@ -141,7 +141,7 @@
                     <td>{$val.floor.floor_name}</td>
                     <td>{$val.dormitory.room_num}</td>
                     <td>{$type[$val.type]}</td>
-                    <td>{$val.info}</td>
+                    <td class="open" style="cursor:pointer" data-value="{$val.info}">{$val.infos}</td>
                     <td>{$val.charge}</td>
                     <td>{$val.phone}</td>
                     <td>{$val.register_date|date='y-m-d',###}</td>
@@ -176,6 +176,15 @@
             format: 'yyyy-MM-dd'
         });
     });
+
+    /* tips显示内容 */
+    $('.open').click(function(){
+        var content = $(this).attr('data-value');
+        layer.open({
+            title: '备注'
+            ,content: content
+        });
+    })
 
     /* 校区选择 */
     $(document).on('change','.select-campus',function(){
