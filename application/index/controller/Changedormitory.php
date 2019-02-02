@@ -622,12 +622,12 @@ class Changedormitory extends Common
 
         // 获取入住学生信息
         $stayInfo = DmStay::get(['student_num' => $studentNum]);
-
+        
         if ( !$stayInfo)
         {
             return json(['status'=>0,'msg'=> "学号" . $studentNum . '的学生未入住宿舍']);
         }
-
+        
         $stayInfo = DmStay::with('campus,build,floor,dormitory')
             ->find($stayInfo['id'])
             ->toArray();
@@ -652,7 +652,8 @@ class Changedormitory extends Common
         $stayInfo['buildList'] = model("Dmbuild")->where(['campus_id' => $stayInfo['campus_id']])
             ->select()
             ->toArray();
-
+        
+        $stayInfo['grade_name'] = Db::name('grade')->where(['gd_id'=>$stayInfo['grade_id']])->value('gd_name');
         return json(['status'=>1,'msg'=>'获取成功','data' => $stayInfo]);
     }
 

@@ -36,11 +36,11 @@
                 </div>
                 <div class="ipt-box ">
                     <label for="">姓名：</label>
-                    <input type="text" class='ipt ipt-xs' name="name">
+                    <input type="text" class='ipt ipt-xs' name="name" >
                 </div>
                 <div class="ipt-box">
                     <label for="">性别：</label>
-                    <select class='ipt-xs' name="sex">
+                    <select class='ipt-xs' name="sex" >
                         <option value="">请选择</option>
                         <option value="1">男</option>
                         <option value="2">女</option>
@@ -58,25 +58,25 @@
                 </div>
                 <div class="ipt-box">
                     <label for="">楼栋名称：</label>
-                    <select class='ipt-xs select-build' name="build_id">
+                    <select class='ipt-xs select-build' name="build_id" >
                         <option value="">请选择</option>
                     </select>
                 </div>
                 <div class="ipt-box">
                     <label for="">层数：</label>
-                    <select class='ipt-xs select-floor' name="floor_id">
+                    <select class='ipt-xs select-floor' name="floor_id" >
                         <option value="">请选择</option>
                     </select>
                 </div>
                 <div class="ipt-box">
                     <label for="">房号：</label>
-                    <select class='ipt-xs select-dormitory' name="dormitory_id">
+                    <select class='ipt-xs select-dormitory' name="dormitory_id" >
                         <option value="">请选择</option>
                     </select>
                 </div>
                 <div class="ipt-box">
                     <label for="">年级：</label>
-                    <select class='ipt-xs' name="grade_id">
+                    <select class='ipt-xs' name="grade_id" >
                         <option value="">请选择</option>
                         {volist name="gradeList" id="gradeInfo"}
                         <option value="{$gradeInfo.gd_id}" >{$gradeInfo.gd_name}</option>
@@ -178,6 +178,49 @@
             max: 0
         });
     });
+
+    $(document).on('blur','#addForm input[name="student_num"]',function(){
+        var studentNum = $(this).val();
+        // if( studentNum )
+        // {
+        //     // 获取入住学生信息
+        //     getStudent(studentNum)
+        // }
+        getStudent(studentNum)
+    });
+
+    function getStudent(studentNum)
+    {
+        $.get("{:url('changedormitory/getStudent')}",{studentNum:studentNum},function(res){
+            if(res.status == 1)
+            {
+                var data = res.data;
+                $('#addForm input[name="student_num"]').val(data.student_num);
+                $('#addForm input[name="name"]').val(data.name);
+                $('#addForm select[name="sex"]').val(data.sex);
+                $('#addForm select[name="campus_id"]').val(data.campus_id);
+                html = '<option selected="selected" value="'+ data.build_id+'">'+ data.build.build_name+'</option>';
+                $('#addForm select[name="build_id"]').html(html);
+                html = '<option selected="selected" value="'+ data.floor_id+'">'+ data.floor.floor_name+'</option>';
+                $('#addForm select[name="floor_id"]').html(html);
+                html = '<option selected="selected" value="'+ data.dormitory_id+'">'+ data.dormitory.room_num+'</option>';
+                $('#addForm select[name="dormitory_id"]').html(html);
+                html = '<option selected="selected" value="'+ data.grade_id+'">'+ data.grade_name+'</option>';
+                $('#addForm select[name="grade_id"]').html(html);
+            }
+            else
+            {
+                $('#addForm input[name="name"]').val('');
+                $('#addForm select[name="sex"]').val('');
+                $('#addForm select[name="campus_id"]').val('');
+                $('#addForm select[name="build_id"]').val('');
+                $('#addForm select[name="floor_id"]').val('');
+                $('#addForm select[name="dormitory_id"]').html('');
+                $('#addForm select[name="grade_id"]').html('');
+                layer.msg(res.msg, {icon: 2});
+            }
+        },'json');
+    }
 
     /* 校区选择 */
     $(document).on('change','.select-campus',function(){

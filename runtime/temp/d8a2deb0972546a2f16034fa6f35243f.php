@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:45:"../application/index/tpl/visiter\teacher.html";i:1548932717;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\header.html";i:1548765601;s:69:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\menu.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\footer.html";i:1548765601;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:45:"../application/index/tpl/visiter\teacher.html";i:1549110905;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\header.html";i:1548765601;s:69:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\menu.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\footer.html";i:1548765601;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -466,7 +466,7 @@
         var name = $('#addForm input[name="name"]').val();
         if ( name == '' )
         {
-            layer.msg('请填写被访人姓名！', {icon: 2});
+            layer.msg('请填写来访人姓名!', {icon: 2});
             return;
         }
 

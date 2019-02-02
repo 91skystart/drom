@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:51:"../application/index/tpl/changedormitory\index.html";i:1548900714;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\header.html";i:1548765601;s:69:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\menu.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\footer.html";i:1548765601;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:51:"../application/index/tpl/changedormitory\index.html";i:1549110544;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\header.html";i:1548765601;s:69:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\menu.html";i:1548765601;s:71:"C:\charles\PHPTutorial\WWW\drom\application\index\tpl\index\footer.html";i:1548765601;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -185,24 +185,24 @@
                 </div>
                 <div class="ipt-box">
                     <label for="">姓名：</label>
-                    <input type="text" class='ipt ipt-xs' name="name" disabled="disabled">
+                    <input type="text" class='ipt ipt-xs' name="name" readonly>
                 </div>
                 <div class="ipt-box">
                     <label for="">性别：</label>
-                    <input type="text" class='ipt ipt-xs' name="sex" disabled="disabled">
+                    <input type="text" class='ipt ipt-xs' name="sex" readonly>
                 </div>
                 <div class="ipt-box">
                     <label for="">楼栋名称：</label>
-                    <input type="text" class='ipt ipt-xs' name="build_name" disabled="disabled">
+                    <input type="text" class='ipt ipt-xs' name="build_name" readonly>
                 </div>
 
                 <div class="ipt-box">
                     <label for="">层数：</label>
-                    <input type="text" class='ipt ipt-xs' name="floor_name" disabled="disabled">
+                    <input type="text" class='ipt ipt-xs' name="floor_name" readonly>
                 </div>
                 <div class="ipt-box">
                     <label for="">房号：</label>
-                    <input type="text" class='ipt ipt-xs' name="room_name" disabled="disabled">
+                    <input type="text" class='ipt ipt-xs' name="room_name" readonly>
                 </div>
                 <div class="ipt-box">
                     <label for="">调房日期：</label>
