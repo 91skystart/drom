@@ -4,6 +4,7 @@ namespace app\index\controller;
 
 use app\index\model\DmDormitory;
 use app\index\model\DmStay;
+use app\index\model\SxdStudentInfo;
 use think\Db;
 class Changedormitory extends Common
 {
@@ -49,6 +50,35 @@ class Changedormitory extends Common
         $this->assign('page',$page);
         $this->assign('search',$this->search);
         return $this->fetch();
+    }
+
+    /**
+     * 删除(退宿)
+     */
+    public function del(){
+        $param = $this->request->param();
+        Db::startTrans();
+        $map['student_num'] = $param['num'];
+        $findOne = $this->model->where($map)->find();
+        try{
+            $res = $this->model->where($map)->delete();
+            if($res){
+                $student = new SxdStudentInfo;
+                $result = $student->where(['ad_uid' => $findOne['ad_uid']])->delete();
+                if(!$result){
+                    Db::rollback();
+                    return json(['status' => 0, 'msg' => '删除失败']);
+                }
+                Db::commit();
+                return json(['status' => 1, 'msg' => '删除成功!']);
+            }else{
+                Db::rollback();
+            }
+            return json(['status' => 0, 'msg' => '删除失败']);
+        }catch(Exception $e){
+            Db::rollback();
+            return json(['status' => 0, 'msg' => '删除失败']);
+        }
     }
 
     /**

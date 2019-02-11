@@ -193,6 +193,9 @@
                     }
                     else
                     {
+                        if(res.status == -1){
+                            location.href="{$urls}";
+                        }
                         layer.msg(res.msg, {icon: 2});
                     }
                 },'json');

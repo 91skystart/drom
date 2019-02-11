@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:47:"../application/index/tpl/dmdormitory\index.html";i:1545289412;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:47:"../application/index/tpl/dmdormitory\index.html";i:1549860636;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1548402963;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +7,7 @@
     <title>home</title>
     <link rel="stylesheet" href="/static/js/layui/css/layui.css">
     <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/header.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/c_page.css">
     <!--[if lt IE 9]>
@@ -21,30 +22,68 @@
 </head>
 
 <body class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
+        <div style='' class='row clearfix basic-desktop-container'>
+                <div class='topbar-box default-style-color col-lg-12'>
+                    <div class='menu-btn'>
+                        <span class='icon-menu'></span>
+                            <ul class='menu-child-list hide'>
+                                <?php if(is_array($systemModel) || $systemModel instanceof \think\Collection || $systemModel instanceof \think\Paginator): if( count($systemModel)==0 ) : echo "" ;else: foreach($systemModel as $key=>$vo): ?>
+                                <li><a href="<?php echo $vo['sd_url']; ?>"><?php echo $vo['sd_name']; ?></a></li>
+                                <?php endforeach; endif; else: echo "" ;endif; ?>
+                            </ul>    
+                    </div>
+                    <div class='topbar col-lg-12 clearfix'>
+                        <div style='' class='pull-left'>
+                            <h3 style='margin-left:70px;font-size:24px;color:#f5f5f5'>欢迎来到<?php echo \think\Config::get('sushe_text'); ?></h3>
+                        </div>
+                        <div class='pull-right '>
+                            <div class='user-box'>
+                                <a href="<?php echo \think\Config::get('sso_config.base_url'); ?>/home/index/usermodify" style="color:#fff;">
+                                    <span class='icon-user'></span>
+                                </a>
+                                <a href="<?php echo \think\Config::get('sso_config.base_url'); ?>/admin/index/index" style="color:#fff;">
+                                    <span class='welcome'>欢迎您，<?php echo $loginName; ?></span>
+                                </a>
+                            </div>
+                            <span class='c-line-1'>|</span>
+                            <div class='topbar-btn-list'>
+                                <span class='btn-item icon-email'></span>
+                                <span class='btn-item icon-question'></span>
+                                <span class='btn-item icon-skin'></span>
+                                <a href="<?php echo $logoutUrl; ?>"><span id='login_out'  class='btn-item icon-close t'></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                
+          
+                
+            </div>
+<!-- <div class="layui-layout layui-layout-admin">
     <div class="layui-header c-header">
         <span class='icon-menu'></span>
-        <div class="layui-logo c-logo">宿舍管理系统</div>
+        <div class="layui-logo c-logo">宿舍管理系统</div> -->
         <!-- 头部区域 -->
-        <span class='head-line-1'></span>
+        <!-- <span class='head-line-1'></span>
         <span class='logo-ps'>科迅软件</span>
         <ul class="layui-nav layui-layout-right nav-user">
-            <li  class="layui-nav-item">
-                <a href="javascript:;" class='username'>
+            <li  class="layui-nav-item"> -->
+                <!-- <a href="javascript:;" class='username'> -->
                     <!--<img src="<?php echo $avatarImg!=''?$avatarImg : ''; ?>http://t.cn/RCzsdCq" class="layui-nav-img">-->
-                    您好 , <?php echo $loginName; ?>
-                </a>
+                    <!-- 您好 , <?php echo $loginName; ?> -->
+                <!-- </a> -->
                 <!--<dl class="layui-nav-child top-nav-child">-->
                     <!--<dd><a href="">基本资料</a></dd>-->
                     <!--<dd><a href="">安全设置</a></dd>-->
                 <!--</dl>-->
-            </li>
+            <!-- </li>
             <span class='c-s-line'></span>
             <li class="layui-nav-item layui-nav-item-close">
                 <a class='icon icon-sign-out' href="<?php echo $logoutUrl; ?>"></a>
             </li>
         </ul>
-    </div>
+    </div> -->
 <div class="layui-side layui-bg-gray">
     <div class="layui-side-scroll">
         <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -119,12 +158,12 @@
             <span><a href="javascript:void(0)">宿舍管理</a></span>
         </div>
         <div class='search-box'>
-          <div class="ipt-box">
+          <!-- <div class="ipt-box">
               <form  action="<?php echo url('dmdormitory/index'); ?>" method='post'>
                   <input placeholder="请输入宿舍房间号" value="<?php echo $room_num; ?>" name="room_num" class='search-ipt' type="text">
                   <span class='icon-search all-search'></span>
               </form>
-          </div>
+          </div> -->
           
         </div>
         <div style='margin-top:20px;' class='clearfix'>
@@ -134,24 +173,28 @@
                 </div>
                 <div class='p-r'>
                     <form id="search_from" action="<?php echo url('dmdormitory/index'); ?>" method='post'>
+                        <label for="">校区：</label>
                         <select class='ipt-xs' name="campus_id">
                             <option value="">请选择</option>
                             <?php if(is_array($campus) || $campus instanceof \think\Collection || $campus instanceof \think\Paginator): $i = 0; $__LIST__ = $campus;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?>
                             <option value="<?php echo $val['cp_id']; ?>" <?php if($val['cp_id'] == $campus_id): ?>selected<?php endif; ?>><?php echo $val['cp_name']; ?></option>
                             <?php endforeach; endif; else: echo "" ;endif; ?>
                         </select>
+                        <label for="">楼栋：</label>
                         <select style='margin:0 10px;' class='ipt-xs' name="build_id">
                             <option value="">请选择</option>
                             <?php if(!empty($build_id) || !empty($campus_id)): if(is_array($build) || $build instanceof \think\Collection || $build instanceof \think\Paginator): $i = 0; $__LIST__ = $build;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;if($campus_id == $val['campus_id']): ?>
                             <option value="<?php echo $val['id']; ?>" <?php if($val['id'] ==$build_id): ?>selected<?php endif; ?>><?php echo $val['build_name']; ?></option>
                             <?php endif; endforeach; endif; else: echo "" ;endif; endif; ?>
                         </select>
+                        <label for="">楼层：</label>
                         <select class='ipt-xs' name="floor_id">
                             <option value="">请选择</option>
                             <?php if(!empty($floor_id) || !empty($build_id)): if(is_array($floor) || $floor instanceof \think\Collection || $floor instanceof \think\Paginator): $i = 0; $__LIST__ = $floor;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;if($build_id == $val['build_id']): ?>
                             <option value="<?php echo $val['id']; ?>" <?php if($val['id'] ==$floor_id): ?>selected<?php endif; ?>><?php echo $val['floor_name']; ?></option>
                             <?php endif; endforeach; endif; else: echo "" ;endif; endif; ?>
                         </select>
+                        <label for="">宿舍：</label>
                         <select style='margin:0 10px;' class='ipt-xs' name="id">
                             <option value="">请选择</option>
                             <?php if(!empty($floor_id) || !empty($id)): if(is_array($dormitory) || $dormitory instanceof \think\Collection || $dormitory instanceof \think\Paginator): $i = 0; $__LIST__ = $dormitory;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;if($floor_id == $val['floor_id']): ?>
@@ -220,7 +263,7 @@
                 <input type="text" class='ipt ipt-xs' name="wardrobe">
             </div>
             <button class="btn btn-info add">添加</button>
-
+            <button class='btn btn-info inp'>一键导入</button>
         </div>
       </form>
         <div class='c-table-box'>
@@ -256,9 +299,9 @@
                     </tr> 
                 </thead>
                 <tbody>
-                <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?>
+                <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $k = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($k % 2 );++$k;?>
                     <tr>
-                        <td><?php echo $val['id']; ?></td>
+                        <td><?php echo $k; ?></td>
                         <td><?php echo $val['campus']['cp_name']; ?></td>
                         <td><?php echo $val['build']['build_name']; ?></td>
                         <td><?php echo $val['floor']['floor_name']; ?></td>
@@ -318,6 +361,28 @@
 </script>
 <script src='/static/js/main.js'></script>
 
+<script type='text' id='class_import_box'>
+    <form name='form2' id="form2" encrypt="'multipart/form-data'">
+        <div class='class-import-box-layer c-layer-padding'>
+            <p style='padding:25px 10px;'>
+                <span>下载导入模板：</span>
+                <a href="/static/宿舍管理.xls">宿舍管理.xls</a>
+            </p>
+            <div style='position:relative;padding:5px 10px;'>
+                <label for="">上传文件：</label>
+                <input type="text" class="up" name="save_path" style="display:none;">
+                <input type="file" id='file_11' name="file" style='opacity:0;position:absolute;left:288px;top:3px;width:86px;height:38px;z-index:999;font-size:0;cursor:pointer'>
+                <input type="text" style='display:inline-block;width:200px;height:30px;' disabled name="title" required  lay-verify="required" placeholder="请选择文件" autocomplete="off" class="layui-input">
+                <button type="button"  style='position:relative;top:-2px;border:1px solid #e6e6e6;background:#fff;color:#666' class="layui-btn" id="test1">
+                    上传
+                </button>
+            </div>
+            <div style='text-align:center;margin-top:15px;'>
+                <button class='layui-btn layui-btn-info import_btn'>导入</button>
+            </div>
+        </div>
+    </form>
+</script>
 <script>
 
     $(document).on('change','#search_from select[name="campus_id"]',function(){
@@ -421,7 +486,7 @@
             $.post("<?php echo url('dmdormitory/insert'); ?>",data,function(res){
                 if(res.status == 1){
                     layer.msg(res.msg, {icon: 1});
-                    setTimeout('location.reload()',3000);
+                    setTimeout('location.reload()',1000);
                 }else{
                     layer.msg(res.msg, {icon: 2});
                 }
@@ -432,6 +497,50 @@
 //    $('#search_from select[name="build_id"]').trigger("change");
 //    $('#search_from select[name="campus_id"]').trigger("change");
 //    $('#search_from select[name="floor_id"]').trigger("change");
+
+$('.inp').click(function(){
+        layer.open({
+            type: 1,
+            title: '导入',
+            closeBtn: 1,
+            area: ['700px', '400px'],
+            shadeClose: false,
+            scrollbar: true,
+            content: $('#class_import_box').html(),
+            success:function(){
+                $("#file_11").on("change",function(){
+                    var v = $("#file_11").val().split("\\")[$("#file_11").val().split("\\").length-1];
+                    var formData = new FormData(document.forms.namedItem("form2"));
+                    $.ajax({
+                        url: "<?php echo url('index/dmdormitory/importdmbuild'); ?>",
+                        type: 'post',
+                        data: formData,
+                        dataType: 'json',
+                        processData:false,
+                        contentType: false, 
+                        success: function(res){
+                            $('.up').val(res);
+                        }
+                    });
+                    $("input[name='title']").val(v);
+                })
+               
+            }
+        });
+
+        $('.import_btn').on('click', function(){
+            $.post("<?php echo url('index/dmdormitory/imfile'); ?>", {'up_path': $(".up").val()}, function(res){
+                if(res.code == 0){
+                    layer.msg(res.msg, {icon:2});
+                    setTimeout('location.reload()',3000);
+                }else{
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout('location.reload()',500);
+                }
+            });
+            return false;
+        });
+    });
 </script>
 </body>
 </html>

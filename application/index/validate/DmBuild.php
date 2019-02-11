@@ -16,7 +16,7 @@ class Dmbuild extends Base
         'build_name.require' =>  '楼栋名称不能为空',
         'build_name.min' =>  '楼栋名称最少1个字符',
         'build_name.max' =>  '楼栋名称最多10个字符',
-        'build_name.checkName' => '楼层名已存在'
+        'build_name.checkName' => '楼层名已存在',
     ];
 
     protected $scene = [
@@ -28,6 +28,7 @@ class Dmbuild extends Base
         $param = \think\Request::instance()->param();
         $buildModel = new \app\index\model\DmBuild;
         $gOne = $buildModel->where(['campus_id' => $param['campus_id'], 'build_name' => $value])->find();
+        if(isset($param['id']) && $param['id'] == $gOne['id']) return true;
         if($gOne){
             return false;
         }

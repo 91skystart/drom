@@ -13,12 +13,12 @@
             <span><a href="javascript:void(0)">宿舍管理</a></span>
         </div>
         <div class='search-box'>
-          <div class="ipt-box">
+          <!-- <div class="ipt-box">
               <form  action="{:url('dmdormitory/index')}" method='post'>
                   <input placeholder="请输入宿舍房间号" value="{$room_num}" name="room_num" class='search-ipt' type="text">
                   <span class='icon-search all-search'></span>
               </form>
-          </div>
+          </div> -->
           
         </div>
         <div style='margin-top:20px;' class='clearfix'>
@@ -28,12 +28,14 @@
                 </div>
                 <div class='p-r'>
                     <form id="search_from" action="{:url('dmdormitory/index')}" method='post'>
+                        <label for="">校区：</label>
                         <select class='ipt-xs' name="campus_id">
                             <option value="">请选择</option>
                             {volist name="campus" id="val"}
                             <option value="{$val.cp_id}" {if condition="$val.cp_id == $campus_id"}selected{/if}>{$val.cp_name}</option>
                             {/volist}
                         </select>
+                        <label for="">楼栋：</label>
                         <select style='margin:0 10px;' class='ipt-xs' name="build_id">
                             <option value="">请选择</option>
                             {if condition="!empty($build_id) || !empty($campus_id)"}
@@ -44,6 +46,7 @@
                             {/volist}
                             {/if}
                         </select>
+                        <label for="">楼层：</label>
                         <select class='ipt-xs' name="floor_id">
                             <option value="">请选择</option>
                             {if condition="!empty($floor_id) || !empty($build_id)"}
@@ -54,6 +57,7 @@
                             {/volist}
                             {/if}
                         </select>
+                        <label for="">宿舍：</label>
                         <select style='margin:0 10px;' class='ipt-xs' name="id">
                             <option value="">请选择</option>
                             {if condition="!empty($floor_id) || !empty($id)"}
@@ -126,7 +130,7 @@
                 <input type="text" class='ipt ipt-xs' name="wardrobe">
             </div>
             <button class="btn btn-info add">添加</button>
-
+            <button class='btn btn-info inp'>一键导入</button>
         </div>
       </form>
         <div class='c-table-box'>
@@ -162,9 +166,9 @@
                     </tr> 
                 </thead>
                 <tbody>
-                {volist name="list" id="val"}
+                {volist name="list" id="val" key="k"}
                     <tr>
-                        <td>{$val.id}</td>
+                        <td>{$k}</td>
                         <td>{$val.campus.cp_name}</td>
                         <td>{$val.build.build_name}</td>
                         <td>{$val.floor.floor_name}</td>
@@ -196,6 +200,28 @@
 
   </div>
 {include file='index/footer' /}
+<script type='text' id='class_import_box'>
+    <form name='form2' id="form2" encrypt="'multipart/form-data'">
+        <div class='class-import-box-layer c-layer-padding'>
+            <p style='padding:25px 10px;'>
+                <span>下载导入模板：</span>
+                <a href="/static/宿舍管理.xls">宿舍管理.xls</a>
+            </p>
+            <div style='position:relative;padding:5px 10px;'>
+                <label for="">上传文件：</label>
+                <input type="text" class="up" name="save_path" style="display:none;">
+                <input type="file" id='file_11' name="file" style='opacity:0;position:absolute;left:288px;top:3px;width:86px;height:38px;z-index:999;font-size:0;cursor:pointer'>
+                <input type="text" style='display:inline-block;width:200px;height:30px;' disabled name="title" required  lay-verify="required" placeholder="请选择文件" autocomplete="off" class="layui-input">
+                <button type="button"  style='position:relative;top:-2px;border:1px solid #e6e6e6;background:#fff;color:#666' class="layui-btn" id="test1">
+                    上传
+                </button>
+            </div>
+            <div style='text-align:center;margin-top:15px;'>
+                <button class='layui-btn layui-btn-info import_btn'>导入</button>
+            </div>
+        </div>
+    </form>
+</script>
 <script>
 
     $(document).on('change','#search_from select[name="campus_id"]',function(){
@@ -299,7 +325,7 @@
             $.post("{:url('dmdormitory/insert')}",data,function(res){
                 if(res.status == 1){
                     layer.msg(res.msg, {icon: 1});
-                    setTimeout('location.reload()',3000);
+                    setTimeout('location.reload()',1000);
                 }else{
                     layer.msg(res.msg, {icon: 2});
                 }
@@ -310,6 +336,50 @@
 //    $('#search_from select[name="build_id"]').trigger("change");
 //    $('#search_from select[name="campus_id"]').trigger("change");
 //    $('#search_from select[name="floor_id"]').trigger("change");
+
+$('.inp').click(function(){
+        layer.open({
+            type: 1,
+            title: '导入',
+            closeBtn: 1,
+            area: ['700px', '400px'],
+            shadeClose: false,
+            scrollbar: true,
+            content: $('#class_import_box').html(),
+            success:function(){
+                $("#file_11").on("change",function(){
+                    var v = $("#file_11").val().split("\\")[$("#file_11").val().split("\\").length-1];
+                    var formData = new FormData(document.forms.namedItem("form2"));
+                    $.ajax({
+                        url: "{:url('index/dmdormitory/importdmbuild')}",
+                        type: 'post',
+                        data: formData,
+                        dataType: 'json',
+                        processData:false,
+                        contentType: false, 
+                        success: function(res){
+                            $('.up').val(res);
+                        }
+                    });
+                    $("input[name='title']").val(v);
+                })
+               
+            }
+        });
+
+        $('.import_btn').on('click', function(){
+            $.post("{:url('index/dmdormitory/imfile')}", {'up_path': $(".up").val()}, function(res){
+                if(res.code == 0){
+                    layer.msg(res.msg, {icon:2});
+                    setTimeout('location.reload()',3000);
+                }else{
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout('location.reload()',500);
+                }
+            });
+            return false;
+        });
+    });
 </script>
 </body>
 </html>

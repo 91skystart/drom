@@ -48,10 +48,14 @@
                             所在层数:{$dormitoryInfo['floor']['floor_name']} <br />
                             房间号: {$dormitoryInfo.room_num}<br />
                             总床位数: {$dormitoryInfo.several}<br />
-                            剩余床位:{$dormitoryInfo.several - $dormitoryInfo.check_in_count}
+                            剩余床位:{if condition="($dormitoryInfo.several - $dormitoryInfo.check_in_count) < 0"}0{else/}{$dormitoryInfo.several - $dormitoryInfo.check_in_count}{/if}
                         </p>
                         <br />
+                        {if condition="($dormitoryInfo.several - $dormitoryInfo.check_in_count) <= 0"}
+                        <a class="btn btn-info" style="background:gray !important;" >人数已满</a>
+                        {else/}
                         <a class="btn btn-info" href="{:url('bed_manage/allot',['id'=> $dormitoryInfo['id']])}">分配学生</a>
+                        {/if}
                     </td>
                 </tr>
 

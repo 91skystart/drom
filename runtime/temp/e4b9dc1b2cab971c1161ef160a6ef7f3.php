@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:42:"../application/index/tpl/campus\index.html";i:1545127147;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1548402963;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:42:"../application/index/tpl/campus\index.html";i:1548467362;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1548402963;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -165,8 +165,8 @@
 
         </div>
         <div style='margin-bottom:20px;' class='nav-tab-box'>
-            <span class='tab-item on'><a  href="<?php echo url('campus/index'); ?>">校区查看</a></span>
-            <span class='tab-item'><a   href="<?php echo url('campus/edit'); ?>">编辑校区</a></span>
+            <!-- <span class='tab-item on'><a  href="<?php echo url('campus/index'); ?>">校区查看</a></span> -->
+            <!-- <span class='tab-item'><a   href="<?php echo url('campus/edit'); ?>">编辑校区</a></span> -->
         </div>
         <div class='c-table-box'>
             <table class="layui-table">

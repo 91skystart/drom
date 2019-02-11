@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:49:"../application/index/tpl/dmbuildmanage\index.html";i:1545289768;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:49:"../application/index/tpl/dmbuildmanage\index.html";i:1549859280;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1548402963;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +7,7 @@
     <title>home</title>
     <link rel="stylesheet" href="/static/js/layui/css/layui.css">
     <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/header.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/c_page.css">
     <!--[if lt IE 9]>
@@ -21,30 +22,68 @@
 </head>
 
 <body class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
+        <div style='' class='row clearfix basic-desktop-container'>
+                <div class='topbar-box default-style-color col-lg-12'>
+                    <div class='menu-btn'>
+                        <span class='icon-menu'></span>
+                            <ul class='menu-child-list hide'>
+                                <?php if(is_array($systemModel) || $systemModel instanceof \think\Collection || $systemModel instanceof \think\Paginator): if( count($systemModel)==0 ) : echo "" ;else: foreach($systemModel as $key=>$vo): ?>
+                                <li><a href="<?php echo $vo['sd_url']; ?>"><?php echo $vo['sd_name']; ?></a></li>
+                                <?php endforeach; endif; else: echo "" ;endif; ?>
+                            </ul>    
+                    </div>
+                    <div class='topbar col-lg-12 clearfix'>
+                        <div style='' class='pull-left'>
+                            <h3 style='margin-left:70px;font-size:24px;color:#f5f5f5'>欢迎来到<?php echo \think\Config::get('sushe_text'); ?></h3>
+                        </div>
+                        <div class='pull-right '>
+                            <div class='user-box'>
+                                <a href="<?php echo \think\Config::get('sso_config.base_url'); ?>/home/index/usermodify" style="color:#fff;">
+                                    <span class='icon-user'></span>
+                                </a>
+                                <a href="<?php echo \think\Config::get('sso_config.base_url'); ?>/admin/index/index" style="color:#fff;">
+                                    <span class='welcome'>欢迎您，<?php echo $loginName; ?></span>
+                                </a>
+                            </div>
+                            <span class='c-line-1'>|</span>
+                            <div class='topbar-btn-list'>
+                                <span class='btn-item icon-email'></span>
+                                <span class='btn-item icon-question'></span>
+                                <span class='btn-item icon-skin'></span>
+                                <a href="<?php echo $logoutUrl; ?>"><span id='login_out'  class='btn-item icon-close t'></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                
+          
+                
+            </div>
+<!-- <div class="layui-layout layui-layout-admin">
     <div class="layui-header c-header">
         <span class='icon-menu'></span>
-        <div class="layui-logo c-logo">宿舍管理系统</div>
+        <div class="layui-logo c-logo">宿舍管理系统</div> -->
         <!-- 头部区域 -->
-        <span class='head-line-1'></span>
+        <!-- <span class='head-line-1'></span>
         <span class='logo-ps'>科迅软件</span>
         <ul class="layui-nav layui-layout-right nav-user">
-            <li  class="layui-nav-item">
-                <a href="javascript:;" class='username'>
+            <li  class="layui-nav-item"> -->
+                <!-- <a href="javascript:;" class='username'> -->
                     <!--<img src="<?php echo $avatarImg!=''?$avatarImg : ''; ?>http://t.cn/RCzsdCq" class="layui-nav-img">-->
-                    您好 , <?php echo $loginName; ?>
-                </a>
+                    <!-- 您好 , <?php echo $loginName; ?> -->
+                <!-- </a> -->
                 <!--<dl class="layui-nav-child top-nav-child">-->
                     <!--<dd><a href="">基本资料</a></dd>-->
                     <!--<dd><a href="">安全设置</a></dd>-->
                 <!--</dl>-->
-            </li>
+            <!-- </li>
             <span class='c-s-line'></span>
             <li class="layui-nav-item layui-nav-item-close">
                 <a class='icon icon-sign-out' href="<?php echo $logoutUrl; ?>"></a>
             </li>
         </ul>
-    </div>
+    </div> -->
 <div class="layui-side layui-bg-gray">
     <div class="layui-side-scroll">
         <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -120,10 +159,10 @@
         </div>
         <div class='search-box'>
           <div class="ipt-box">
-              <form  action="<?php echo url('Dmbuildmanage/index'); ?>" method='post'>
+              <!-- <form  action="<?php echo url('Dmbuildmanage/index'); ?>" method='post'>
                   <input placeholder="请输入姓名"  name="name" value="<?php echo $name; ?>" class='search-ipt' type="text">
                   <span class='icon-search all-search'></span>
-              </form>
+              </form> -->
           </div>
           
         </div>
@@ -210,9 +249,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?>
+                <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $k = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($k % 2 );++$k;?>
                     <tr>
-                        <td><?php echo $val['id']; ?></td>
+                        <td><?php echo $k; ?></td>
                         <td><?php echo $val['job_num']; ?></td>
                         <td><?php echo $val['name']; ?></td>
                         <td><?php echo $val['campus']['cp_name']; ?></td>

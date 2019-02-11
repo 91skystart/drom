@@ -478,6 +478,7 @@ class BedManage extends Common
         $this->assign('page',$page);
         $this->assign('param',$paramData);
         $this->assign('dormitoryInfo',$dormitoryInfo);
+        $this->assign('urls', $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].substr($_SERVER['REQUEST_URI'], 0, 18).'room/id/'.$this->request->param('id').'.html');
         return $this->fetch();
     }
 
@@ -574,11 +575,12 @@ class BedManage extends Common
 
          if ( $dormitoryInfo['several'] > 0 && $stayStudentTotal == $dormitoryInfo['several'] )
          {
-             return json(['status' => 0, 'msg' => '宿舍已经住满！']);
+            return json(['status' => -1, 'msg' => '宿舍已经住满！']);
          }
 
         /* 学生ID处理 */
         $idsList = explode(",",$ids);
+        
         $temp = [];
         foreach ( $idsList as $value)
         {
@@ -589,7 +591,7 @@ class BedManage extends Common
         /* 判断学生是否能全部入住到宿舍 */
         if (  $dormitoryInfo['several'] > 0 && $stayStudentTotal + count($idsList) > $dormitoryInfo['several'] )
         {
-            return json(['status=>0','msg'=>'宿舍容纳不下，还能住'.$dormitoryInfo['several']-$stayStudentTotal.'人']);
+            return json(['status=>0','msg'=>'宿舍容纳不下,还能住'.($dormitoryInfo['several']-$stayStudentTotal).'人']);
         }
 
         $studentModel = new SxdStudentInfo();
@@ -614,7 +616,7 @@ class BedManage extends Common
          */
 
         /* 判断入住学生的性别是否一致 */
-        $studentSex = [] ;
+        $studentSex = $errCampus = [] ;
         foreach ( $studentList as $value )
         {
             if ( isset($studentSex[$value['ad_sex']]) )
@@ -625,6 +627,12 @@ class BedManage extends Common
             {
                 $studentSex[$value['ad_sex']] = 1;
             }
+            if($dormitoryInfo['campus_id'] != $value['cp_id']){
+                array_push($errCampus, $value);
+            }
+        }
+        iF($errCampus){
+            return json(['status' => 0, 'msg' => '分配对象的校区必须一致']);
         }
 
         if ( count($studentSex) > 1)

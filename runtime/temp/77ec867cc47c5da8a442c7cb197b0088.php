@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:41:"../application/index/tpl/dmbuild\add.html";i:1545288777;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1548402963;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:41:"../application/index/tpl/dmbuild\add.html";i:1549108466;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1548402963;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -155,7 +155,7 @@
             <span>></span>
             <span><a href="">楼栋管理</a></span>
         </div>
-        <div class='search-box'>
+        <!-- <div class='search-box'>
             <div class="ipt-box">
                 <form  action="<?php echo url('Dmbuild/edit'); ?>" method='post'>
                     <input placeholder="请输入楼栋名称" value="<?php echo $build_name; ?>" name="build_name" class='search-ipt' type="text">
@@ -163,7 +163,7 @@
                 </form>
             </div>
 
-        </div>
+        </div> -->
         <div style='margin-top:20px;' class='clearfix'>
             <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
                 <span class='tab-item on'><a  href="<?php echo url('Dmbuild/add'); ?>">楼栋添加</a></span>
@@ -200,34 +200,41 @@
                     </select>
                 </div>
                 <div class="ipt-box">
-                    <label for="">楼栋设置：</label>
+                    <label for="">楼栋名称：</label>
                     <input type="text" class='ipt ipt-xs' name="build_name">
                 </div>
+                <div class="ipt-box">
+                    <label for="">楼栋备注：</label>
+                    <input type="text" class='ipt ipt-xs' name="dm_info">
+                </div>
                 <button class='btn btn-info save'>添加</button>
+                <button class='btn btn-info inp'>一键导入</button>
             </form>
         </div>
 
         <div class='c-table-box'>
             <table class="layui-table">
                 <colgroup>
-                    <col width="15%">
+                    <!-- <col width="15%">
                     <col width="30%">
                     <col width="30%">
-                    <col width="25%">
+                    <col width="25%"> -->
                 </colgroup>
                 <thead>
                 <tr>
                     <th>序号</th>
                     <th>校区名称</th>
                     <th>楼栋名称</th>
+                    <th>备注</th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($i % 2 );++$i;?>
+                <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $k = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$val): $mod = ($k % 2 );++$k;?>
                 <tr>
-                    <td><?php echo $val['id']; ?></td>
+                    <td><?php echo $k; ?></td>
                     <td><?php echo $val['campus']['cp_name']; ?></td>
                     <td><?php echo $val['build_name']; ?></td>
+                    <td title="<?php echo $val['dm_info']; ?>"><?php if(mb_strlen($val['dm_info'])>5): ?><?php echo mb_substr($val['dm_info'], 0, 5); ?>...<?php else: ?><?php echo $val['dm_info']; endif; ?></td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
                 </tbody>
@@ -276,6 +283,29 @@
 </script>
 <script src='/static/js/main.js'></script>
 
+<script type='text' id='class_import_box'>
+    <form name='form2' id="form2" encrypt="'multipart/form-data'">
+        <div class='class-import-box-layer c-layer-padding'>
+            <p style='padding:25px 10px;'>
+                <span>下载导入模板：</span>
+                <a href="/static/楼栋管理.xls">楼栋管理.xls</a>
+            </p>
+            <div style='position:relative;padding:5px 10px;'>
+                <label for="">上传文件：</label>
+                <input type="text" class="up" name="save_path" style="display:none;">
+                <input type="file" id='file_11' name="file" style='opacity:0;position:absolute;left:288px;top:3px;width:86px;height:38px;z-index:999;font-size:0;cursor:pointer'>
+                <input type="text" style='display:inline-block;width:200px;height:30px;' disabled name="title" required  lay-verify="required" placeholder="请选择文件" autocomplete="off" class="layui-input">
+                <button type="button"  style='position:relative;top:-2px;border:1px solid #e6e6e6;background:#fff;color:#666' class="layui-btn" id="test1">
+                    上传
+                </button>
+            </div>
+            <div style='text-align:center;margin-top:15px;'>
+                <button class='layui-btn layui-btn-info import_btn'>导入</button>
+            </div>
+        </div>
+    </form>
+</script>
+
 <script>
 
     $(document).on('change','#search_from select[name="campus_id"]',function(){
@@ -304,15 +334,56 @@
             $.post("<?php echo url('Dmbuild/insert'); ?>",data,function(res){
                 if(res.status == 1){
                     layer.msg(res.msg, {icon: 1});
-                    setTimeout('location.reload()',3000);
                 }else{
                     layer.msg(res.msg, {icon: 2});
                 }
+                setTimeout('location.reload()',500);
             },'json');
         }
     });
 
+    $('.inp').click(function(){
+        layer.open({
+            type: 1,
+            title: '导入',
+            closeBtn: 1,
+            area: ['700px', '400px'],
+            shadeClose: false,
+            scrollbar: true,
+            content: $('#class_import_box').html(),
+            success:function(){
+                $("#file_11").on("change",function(){
+                    var v = $("#file_11").val().split("\\")[$("#file_11").val().split("\\").length-1];
+                    var formData = new FormData(document.forms.namedItem("form2"));
+                    $.ajax({
+                        url: "<?php echo url('index/dmbuild/importdmbuild'); ?>",
+                        type: 'post',
+                        data: formData,
+                        dataType: 'json',
+                        processData:false,
+                        contentType: false, 
+                        success: function(res){
+                            $('.up').val(res);
+                        }
+                    });
+                    $("input[name='title']").val(v);
+                })
+               
+            }
+        });
 
+        $('.import_btn').on('click', function(){
+            $.post("<?php echo url('index/dmbuild/imfile'); ?>", {'up_path': $(".up").val()}, function(res){
+                if(res.code == 0){
+                    layer.msg(res.msg, {icon:2});
+                }else{
+                    layer.msg(res.msg, {icon: 1});
+                }
+                setTimeout('location.reload()',500);
+            });
+            return false;
+        });
+    });
 </script>
 </body>
 </html>

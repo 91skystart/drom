@@ -386,14 +386,6 @@ class Common extends Controller
         return json(['status' => 0, 'msg' => '恢复失败！']);
     }
 
-    /**
-	 * exportExcel
-	 * @param $xlsTitle exceltitle
-	 * @param $cellData tablehead
-	 * @param $data tabledata
-	 * @param $type exceltype
-	 * @author mupeng <1912959071@qq.com>
-	 */
 	protected function exportExcel($xlsTitle, $cellData, $data, $type = 'Excel5'){
 		$suffix = $type == 'Excel5'? 'xls': 'xlsx';
 		$fileName = date('YmdHis').'.'.$suffix;
@@ -401,28 +393,18 @@ class Common extends Controller
 		$oPhpExcel = new \PHPExcel();
 		$cellNum = count($cellData);
 		$cellName = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ'];
-		//所有单元格（行）默认高度
 		$oPhpExcel->getActiveSheet(0)->getDefaultRowDimension()->setRowHeight(25);
-		$objSheet = $oPhpExcel->getActiveSheet(0)->mergeCells('A1:'.$cellName[$cellNum-1].'1'); //合并单元格,并且获得当前活动的sheet
-		//设置文字居左（HORIZONTAL_LEFT，默认值）中（HORIZONTAL_CENTER）右（HORIZONTAL_RIGHT）
+		$objSheet = $oPhpExcel->getActiveSheet(0)->mergeCells('A1:'.$cellName[$cellNum-1].'1');
 		$oPhpExcel->setActiveSheetIndex(0)->setCellValue('A1', $xlsTitle)->getStyle('A1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER); 
-		// 设置字体大小
 		$objSheet->getStyle('A1')->getFont()->setSize(18);
-		// 设置字体加粗
 		$objSheet->getStyle('A1')->getFont()->setBold(true);
-		// 设置标题
 		$objSheet->setTitle($xlsTitle);
-		// 表头数据处理
 		foreach($cellData as $k=>$val){
-			// 设置每一列宽度
 			$objSheet->getColumnDimension($cellName[$k])->setWidth(16);
 			$objSheet->getStyle('A1')->getFont()->setSize(16);
-			// 设置水平居中和垂直居中
 			$objSheet->getStyle($cellName[$k].'2')->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			// 设置数据
 			$oPhpExcel->getActiveSheet(0)->setCellValue($cellName[$k].'2', $val[0])->getStyle($cellName[$k].'2')->getFont()->setBold(true);
 		}
-		// 表数据处理
 		foreach($data as $key => $v){
 			foreach($cellData as $key2 => $v2){
 				$objSheet->getStyle($cellName[$key2].($key+'3'))->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER)->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -430,21 +412,14 @@ class Common extends Controller
 				$oPhpExcel->getActiveSheet(0)->setCellValue($cellName[$key2].($key+'3'), $v[$v2[1]]);	
 			}
 		}
-		// 告诉浏览器的输出类型
 		$type == 'Excel5'? header('Content-Type: application/vnd.ms-excel;charset=utf-8;name="'.$xlsTitle.'.xls"'): header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');;
-		// 告诉浏览器输出文件的名称，attachment新窗口打印inline本窗口打印
 		header('Content-Disposition: attachment;filename="'.$fileName.'"');
-		// 禁止缓存
 		header('Cache-Control: max-age=0');
 		$objWriter = \PHPExcel_IOFactory::createWriter($oPhpExcel, $type);
     	$objWriter->save('php://output');
 		exit;
 	}
 
-	/**
-	 * importExcel
-	 * @author mupeng <1912959071@qq.com>
-	 */
 	protected function importExcel($file, $headCount = 3){
 		$path = realpath($_SERVER['DOCUMENT_ROOT'].$file);
 		if(!file_exists($path)){
@@ -455,13 +430,9 @@ class Common extends Controller
 		$phpReader = $objReader->load($path);
 		if(!isset($phpReader)) return returnJson('文件导入失败', 0, '', true);
 		$worksheet = $phpReader->getAllSheets();
-		// 处理数据对象
 		foreach($worksheet as $val){
-			// 获取表头
 			$sheetTitle = $val->getTitle();
-			// 获取行数(包括表头)
 			$totalRows = $val->getHighestRow();
-			// 获取总列数
 			$sCols = $val->getHighestColumn();
 			$totalCols = \PHPExcel_Cell::columnIndexFromString($sCols);
 			$arr = [];
@@ -474,7 +445,6 @@ class Common extends Controller
 					$col = \PHPExcel_Cell::stringFromColumnIndex($currentColumn);
 					$address = $col.$currentRow;
 					$value = $val->getCell($address)->getValue();
-					// 不能使用公式
 					if (substr($value,0,1) == '=') exit(returnJson('不能使用公式', 0, '', true));
 					if ($cell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC){
 						$cellstyleformat = $cell->getStyle($cell->getCoordinate())->getNumberFormat();
@@ -502,6 +472,17 @@ class Common extends Controller
 			return ['totalrows' => count($arr), 'totalcols' => $totalCols, 'title' => $sheetTitle, 'data' => $arr];
 		}
     }
+
+    public function importdmbuild(){
+        $files = \think\Request::instance()->file('file');
+        $info = $files->move(ROOT_PATH.'public'.DS.'upload'.DS.'files');
+        if($info){
+            return "\\upload\\files\\".$info->getSaveName();
+        }else{
+            return $info->getError();
+        }
+    }
+
     private function sysList($auth){
 		$data = 1;
 		switch($auth){

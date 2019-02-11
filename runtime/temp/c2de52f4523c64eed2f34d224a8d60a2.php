@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:51:"../application/index/tpl/changedormitory\index.html";i:1545290238;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1545372212;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:51:"../application/index/tpl/changedormitory\index.html";i:1549885594;s:55:"D:\wwwroot\dorm\application\index\tpl\index\header.html";i:1548402963;s:53:"D:\wwwroot\dorm\application\index\tpl\index\menu.html";i:1545785666;s:55:"D:\wwwroot\dorm\application\index\tpl\index\footer.html";i:1543992410;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +7,7 @@
     <title>home</title>
     <link rel="stylesheet" href="/static/js/layui/css/layui.css">
     <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/header.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/c_page.css">
     <!--[if lt IE 9]>
@@ -21,30 +22,68 @@
 </head>
 
 <body class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
+        <div style='' class='row clearfix basic-desktop-container'>
+                <div class='topbar-box default-style-color col-lg-12'>
+                    <div class='menu-btn'>
+                        <span class='icon-menu'></span>
+                            <ul class='menu-child-list hide'>
+                                <?php if(is_array($systemModel) || $systemModel instanceof \think\Collection || $systemModel instanceof \think\Paginator): if( count($systemModel)==0 ) : echo "" ;else: foreach($systemModel as $key=>$vo): ?>
+                                <li><a href="<?php echo $vo['sd_url']; ?>"><?php echo $vo['sd_name']; ?></a></li>
+                                <?php endforeach; endif; else: echo "" ;endif; ?>
+                            </ul>    
+                    </div>
+                    <div class='topbar col-lg-12 clearfix'>
+                        <div style='' class='pull-left'>
+                            <h3 style='margin-left:70px;font-size:24px;color:#f5f5f5'>欢迎来到<?php echo \think\Config::get('sushe_text'); ?></h3>
+                        </div>
+                        <div class='pull-right '>
+                            <div class='user-box'>
+                                <a href="<?php echo \think\Config::get('sso_config.base_url'); ?>/home/index/usermodify" style="color:#fff;">
+                                    <span class='icon-user'></span>
+                                </a>
+                                <a href="<?php echo \think\Config::get('sso_config.base_url'); ?>/admin/index/index" style="color:#fff;">
+                                    <span class='welcome'>欢迎您，<?php echo $loginName; ?></span>
+                                </a>
+                            </div>
+                            <span class='c-line-1'>|</span>
+                            <div class='topbar-btn-list'>
+                                <span class='btn-item icon-email'></span>
+                                <span class='btn-item icon-question'></span>
+                                <span class='btn-item icon-skin'></span>
+                                <a href="<?php echo $logoutUrl; ?>"><span id='login_out'  class='btn-item icon-close t'></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                
+          
+                
+            </div>
+<!-- <div class="layui-layout layui-layout-admin">
     <div class="layui-header c-header">
         <span class='icon-menu'></span>
-        <div class="layui-logo c-logo">宿舍管理系统</div>
+        <div class="layui-logo c-logo">宿舍管理系统</div> -->
         <!-- 头部区域 -->
-        <span class='head-line-1'></span>
+        <!-- <span class='head-line-1'></span>
         <span class='logo-ps'>科迅软件</span>
         <ul class="layui-nav layui-layout-right nav-user">
-            <li  class="layui-nav-item">
-                <a href="javascript:;" class='username'>
+            <li  class="layui-nav-item"> -->
+                <!-- <a href="javascript:;" class='username'> -->
                     <!--<img src="<?php echo $avatarImg!=''?$avatarImg : ''; ?>http://t.cn/RCzsdCq" class="layui-nav-img">-->
-                    您好 , <?php echo $loginName; ?>
-                </a>
+                    <!-- 您好 , <?php echo $loginName; ?> -->
+                <!-- </a> -->
                 <!--<dl class="layui-nav-child top-nav-child">-->
                     <!--<dd><a href="">基本资料</a></dd>-->
                     <!--<dd><a href="">安全设置</a></dd>-->
                 <!--</dl>-->
-            </li>
+            <!-- </li>
             <span class='c-s-line'></span>
             <li class="layui-nav-item layui-nav-item-close">
                 <a class='icon icon-sign-out' href="<?php echo $logoutUrl; ?>"></a>
             </li>
         </ul>
-    </div>
+    </div> -->
 <div class="layui-side layui-bg-gray">
     <div class="layui-side-scroll">
         <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -132,7 +171,7 @@
                 <span class='tab-item on'><a href="<?php echo url('changedormitory/index'); ?>">学生调往空宿舍</a></span>
                 <span class='tab-item'><a href="<?php echo url('changedormitory/student'); ?>">学生对调</a></span>
                 <span class='tab-item'><a href="<?php echo url('changedormitory/emptyRoom'); ?>">整间宿舍调往空宿舍</a></span>
-                <span class='tab-item'><a href="<?php echo url('changedormitory/room'); ?>">两件宿舍对调</a></span>
+                <span class='tab-item'><a href="<?php echo url('changedormitory/room'); ?>">两间宿舍对调</a></span>
             </div>
         </div>
         <form id="form_name" action="" onsubmit="return false">
@@ -142,28 +181,28 @@
             <div style='' class='ipt-main-box'>
                 <div class="ipt-box">
                     <label for="">学号：</label>
-                    <input type="text" class='ipt ipt-xs' name="student_num">
+                    <input type="text" class='ipt ipt-xs' name="student_num" disabled>
                 </div>
                 <div class="ipt-box">
                     <label for="">姓名：</label>
-                    <input type="text" class='ipt ipt-xs' name="name">
+                    <input type="text" class='ipt ipt-xs' name="name" disabled>
                 </div>
                 <div class="ipt-box">
                     <label for="">性别：</label>
-                    <input type="text" class='ipt ipt-xs' name="sex">
+                    <input type="text" class='ipt ipt-xs' name="sex" disabled>
                 </div>
                 <div class="ipt-box">
                     <label for="">楼栋名称：</label>
-                    <input type="text" class='ipt ipt-xs' name="build_name">
+                    <input type="text" class='ipt ipt-xs' name="build_name" disabled>
                 </div>
 
                 <div class="ipt-box">
                     <label for="">层数：</label>
-                    <input type="text" class='ipt ipt-xs' name="floor_name">
+                    <input type="text" class='ipt ipt-xs' name="floor_name" disabled>
                 </div>
                 <div class="ipt-box">
                     <label for="">房号：</label>
-                    <input type="text" class='ipt ipt-xs' name="room_name">
+                    <input type="text" class='ipt ipt-xs' name="room_name" disabled>
                 </div>
                 <div class="ipt-box">
                     <label for="">调房日期：</label>
@@ -206,7 +245,7 @@
                     <col width="6%">
                     <col width="6%">
                     <col width='6%'>
-                    <col width="6%">
+                    <col width="12%">
                 </colgroup>
                 <thead>
                 <tr>
@@ -235,9 +274,10 @@
                     <td><?php echo $val['before_build']['build_name']; ?></td>
                     <td><?php echo $val['before_floor']['floor_name']; ?></td>
                     <td><?php echo $val['before_dormitory']['room_num']; ?></td>
-                    <td><?php echo date("y-m-d",$val['adjust_date']); ?></td>
+                    <td><?php if($val['adjust_date']): ?><?php echo date("Y-m-d",$val['adjust_date']); else: ?>--<?php endif; ?></td>
                     <td class='opt-td'>
                         <a href="javascript:void(0)" data-id="<?php echo $val['student_num']; ?>" class="js-edit">编辑</a>
+                        <a href="javascript:void(0)" data-id="<?php echo $val['student_num']; ?>" class="js-delete">删除</a>
                     </td>
                 </tr>
                 </tbody>
@@ -463,6 +503,16 @@
         },'json');
     }
 
+    $('.js-delete').on('click', function(){
+        $.post('<?php echo url("index/changedormitory/del"); ?>',{'num': $(this).attr('data-id')}, function(res){
+            if(res.status){
+                layer.msg(res.msg, {icon: 1});
+            }else{
+                layer.msg(res.msg, {icon: 2});
+            }
+            setTimeout(function(){location.reload();},500);
+        });
+    });
 </script>
 </body>
 </html>

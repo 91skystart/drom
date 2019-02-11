@@ -13,12 +13,12 @@
             <span><a href="avascript:void(0)">宿舍管理</a></span>
         </div>
         <div class='search-box'>
-            <div class="ipt-box">
+            <!-- <div class="ipt-box">
                 <form  action="{:url('dmdormitory/edit')}" method='post'>
                     <input placeholder="请输入宿舍房间号" value="{$room_num}" name="room_num" class='search-ipt' type="text">
                     <span class='icon-search all-search'></span>
                 </form>
-            </div>
+            </div> -->
         </div>
         <div style='margin-top:20px;' class='clearfix'>
             <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
@@ -27,12 +27,14 @@
             </div>
             <div class='p-r'>
                 <form id="search_from" action="{:url('dmdormitory/edit')}" method='post'>
+                    <label for="">校区：</label>
                     <select class='ipt-xs' name="campus_id">
                         <option value="">请选择</option>
                         {volist name="campus" id="val"}
                         <option value="{$val.cp_id}" {if condition="$val.cp_id == $campus_id"}selected{/if}>{$val.cp_name}</option>
                         {/volist}
                     </select>
+                    <label for="">楼栋：</label>
                     <select style='margin:0 10px;' class='ipt-xs' name="build_id">
                         <option value="">请选择</option>
                         {if condition="!empty($build_id) || !empty($campus_id)"}
@@ -43,6 +45,7 @@
                         {/volist}
                         {/if}
                     </select>
+                    <label for="">楼层：</label>
                     <select class='ipt-xs' name="floor_id">
                         <option value="">请选择</option>
                         {if condition="!empty($floor_id) || !empty($build_id)"}
@@ -53,6 +56,7 @@
                         {/volist}
                         {/if}
                     </select>
+                    <label for="">宿舍：</label>
                     <select style='margin:0 10px;' class='ipt-xs' name="id">
                         <option value="">请选择</option>
                         {if condition="!empty($floor_id) || !empty($id)"}
@@ -361,10 +365,10 @@
                 $.post("{:url('dmdormitory/delete')}",{id:id},function(res){
                     if(res.status == 1){
                         layer.msg(res.msg, {icon: 1});
-                        setTimeout('location.reload()',3000);
                     }else{
                         layer.msg(res.msg, {icon: 2});
                     }
+                    setTimeout('location.reload()',1000);
                 },'json');
             });
         }

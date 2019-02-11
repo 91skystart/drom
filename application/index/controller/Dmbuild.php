@@ -2,6 +2,7 @@
 
 namespace app\index\controller;
 use app\index\model\Campus;
+use think\Db;
 class Dmbuild extends Common
 {
 
@@ -15,9 +16,33 @@ class Dmbuild extends Common
         parent::_initialize();
     }
     
-    // TODO
-    public function importdmbuild(){
-        // 'index/dmbuild/importdmbuild';
+    public function imfile(){
+        $path = $this->request->param('up_path');
+        $excelResult = $this->importExcel($path, 1);
+        $all = model('Campus')->select()->toArray();
+        $aCp[0] = [];
+        foreach($all as $k => $aa) {
+            array_push($aCp[0], $aa['cp_name']);
+        }
+        
+        $err = $exec = [];
+        foreach($excelResult['data'] as $val){
+            $a1 = Db::name('Campus')->where(['cp_name' => $val[0]])->find();
+            if(Db::name('dmBuild')->where(['campus_id' => $a1['cp_id']])->find()){
+                return ['code' => 0, 'msg' => $a1['cp_name'].'已存在'];
+            }
+            
+            if(!in_array($val[0], $aCp[0])) array_push($err, $val);
+            array_push($exec, ['campus_id' => $a1['cp_id'], 'build_name' => $val[1], 'dm_info' => $val[2]]);
+        }
+        if($err){
+            return ['code' => 0, 'msg' => '上传文件中的校区火舌楼栋已存在'];
+        }
+        $res = model('dmbuild')->saveAll($exec);
+        if($res)
+            return ['code' => 1, 'msg' => '导入成功'];
+        else
+            return ['code' => 0, 'msg' => '导入失败'];
     }
 
     public function add()
@@ -116,5 +141,13 @@ class Dmbuild extends Common
 
         //渲染模板
         return $this->fetch();
+    }
+
+    public function delete(){
+        $param = $this->request->param();
+        model('dmFloor')->where(['build_id' => $param['id']])->delete();
+        model('dmDormitory')->where(['build_id' => $param['id']])->delete();
+        model('dmBuild')->where(['id' => $param['id']])->delete();
+        return json(['status' => 1, 'msg' => '删除成功！']);
     }
 }

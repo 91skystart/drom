@@ -26,7 +26,7 @@
                 <span class='tab-item on'><a href="{:url('changedormitory/index')}">学生调往空宿舍</a></span>
                 <span class='tab-item'><a href="{:url('changedormitory/student')}">学生对调</a></span>
                 <span class='tab-item'><a href="{:url('changedormitory/emptyRoom')}">整间宿舍调往空宿舍</a></span>
-                <span class='tab-item'><a href="{:url('changedormitory/room')}">两件宿舍对调</a></span>
+                <span class='tab-item'><a href="{:url('changedormitory/room')}">两间宿舍对调</a></span>
             </div>
         </div>
         <form id="form_name" action="" onsubmit="return false">
@@ -36,28 +36,28 @@
             <div style='' class='ipt-main-box'>
                 <div class="ipt-box">
                     <label for="">学号：</label>
-                    <input type="text" class='ipt ipt-xs' name="student_num">
+                    <input type="text" class='ipt ipt-xs' name="student_num" disabled>
                 </div>
                 <div class="ipt-box">
                     <label for="">姓名：</label>
-                    <input type="text" class='ipt ipt-xs' name="name">
+                    <input type="text" class='ipt ipt-xs' name="name" disabled>
                 </div>
                 <div class="ipt-box">
                     <label for="">性别：</label>
-                    <input type="text" class='ipt ipt-xs' name="sex">
+                    <input type="text" class='ipt ipt-xs' name="sex" disabled>
                 </div>
                 <div class="ipt-box">
                     <label for="">楼栋名称：</label>
-                    <input type="text" class='ipt ipt-xs' name="build_name">
+                    <input type="text" class='ipt ipt-xs' name="build_name" disabled>
                 </div>
 
                 <div class="ipt-box">
                     <label for="">层数：</label>
-                    <input type="text" class='ipt ipt-xs' name="floor_name">
+                    <input type="text" class='ipt ipt-xs' name="floor_name" disabled>
                 </div>
                 <div class="ipt-box">
                     <label for="">房号：</label>
-                    <input type="text" class='ipt ipt-xs' name="room_name">
+                    <input type="text" class='ipt ipt-xs' name="room_name" disabled>
                 </div>
                 <div class="ipt-box">
                     <label for="">调房日期：</label>
@@ -100,7 +100,7 @@
                     <col width="6%">
                     <col width="6%">
                     <col width='6%'>
-                    <col width="6%">
+                    <col width="12%">
                 </colgroup>
                 <thead>
                 <tr>
@@ -129,9 +129,10 @@
                     <td>{$val.before_build.build_name}</td>
                     <td>{$val.before_floor.floor_name}</td>
                     <td>{$val.before_dormitory.room_num}</td>
-                    <td>{$val.adjust_date|date="y-m-d",###}</td>
+                    <td>{if condition="$val.adjust_date"}{$val.adjust_date|date="Y-m-d",###}{else/}--{/if}</td>
                     <td class='opt-td'>
                         <a href="javascript:void(0)" data-id="{$val.student_num}" class="js-edit">编辑</a>
+                        <a href="javascript:void(0)" data-id="{$val.student_num}" class="js-delete">删除</a>
                     </td>
                 </tr>
                 </tbody>
@@ -329,6 +330,16 @@
         },'json');
     }
 
+    $('.js-delete').on('click', function(){
+        $.post('{:url("index/changedormitory/del")}',{'num': $(this).attr('data-id')}, function(res){
+            if(res.status){
+                layer.msg(res.msg, {icon: 1});
+            }else{
+                layer.msg(res.msg, {icon: 2});
+            }
+            setTimeout(function(){location.reload();},500);
+        });
+    });
 </script>
 </body>
 </html>

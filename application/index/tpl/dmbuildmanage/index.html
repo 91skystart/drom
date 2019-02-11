@@ -14,10 +14,10 @@
         </div>
         <div class='search-box'>
           <div class="ipt-box">
-              <form  action="{:url('Dmbuildmanage/index')}" method='post'>
+              <!-- <form  action="{:url('Dmbuildmanage/index')}" method='post'>
                   <input placeholder="请输入姓名"  name="name" value="{$name}" class='search-ipt' type="text">
                   <span class='icon-search all-search'></span>
-              </form>
+              </form> -->
           </div>
           
         </div>
@@ -106,9 +106,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                {volist name="list" id="val"}
+                {volist name="list" id="val" key="k"}
                     <tr>
-                        <td>{$val.id}</td>
+                        <td>{$k}</td>
                         <td>{$val.job_num}</td>
                         <td>{$val.name}</td>
                         <td>{$val.campus.cp_name}</td>

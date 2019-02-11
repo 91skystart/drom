@@ -22,7 +22,7 @@
         </div>
         <div style='margin-top:20px;' class='clearfix'>
             <div style='margin-bottom:20px;' class='nav-tab-box p-l'>
-                <span class='tab-item on'><a  href="">智慧分配</a></span>
+                <!-- <span class='tab-item on'><a  href="">智慧分配</a></span> -->
             </div>
             <div class='p-r'>
                 <form id="search_from" action="{:url('bed_manage/builder',['id' => $builderInfo['id']])}" method='post'>
@@ -57,7 +57,7 @@
                                     <li class="branch-left-item">所在层数：{$floorInfo['floor_name']}</li>
                                     <li class="branch-left-item">房间号：{$dormitoryInfo['room_num']}</li>
                                     <li class="branch-left-item">总床位数：{$dormitoryInfo['several']}</li>
-                                    <li class="branch-left-item">剩余床位:{$dormitoryInfo['room_leave_count']}</li>
+                                    <li class="branch-left-item">剩余床位:{if condition="$dormitoryInfo['room_leave_count'] <0"} 0 {else/} {$dormitoryInfo['room_leave_count']}{/if}</li>
                                 </ul>
                             </div>
                             <div class="branch-right" >
@@ -80,7 +80,11 @@
                                     <div class="branch-inner"> {$dormitoryInfo['room_num']}</div>
                                 </div>
                             </div>
+                            {if condition="$dormitoryInfo['room_leave_count'] <= 0"}
+                            <a class="btn btn-info" style="margin-left: 66px;background:gray !important;" >人数已满</a>
+                            {else/}
                             <a class="btn btn-info" style="margin-left: 66px;" href="{:url('bed_manage/room',['id' => $dormitoryInfo['id']])}">安排入住</a>
+                            {/if}
                         </div>
                     {/volist}
                     </div>
